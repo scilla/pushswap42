@@ -6,7 +6,7 @@
 /*   By: scilla <scilla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/18 16:02:00 by scilla            #+#    #+#             */
-/*   Updated: 2021/05/19 18:01:47 by scilla           ###   ########.fr       */
+/*   Updated: 2021/05/19 18:15:56 by scilla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,13 +123,13 @@ int	max_in_stack(t_stack **stack, int len)
 	return (res);
 }
 
-t_stack	*stack_dup(t_stack *src)
+t_stack	*stack_dup(t_stack *src, int len)
 {
 	t_stack	*dst;
 	int		i;
 	
 	dst = malloc(sizeof(t_stack));
-	dst->data = malloc(sizeof(int) * src->len);
+	dst->data = malloc(sizeof(int) * len);
 	dst->len = src->len;
 	i = src->len;
 	while (i > 0)
@@ -143,22 +143,24 @@ void	print_stack(t_stack *src)
 {
 	int i;
 	
+	printf("stack len: %d\n", src->len);
 	i = 0;
 	while (i < src->len)
 	{
 		printf("%d\n", src->data[i]);
 		i++;
 	}
+	printf("stack end\n");
 }
 
-void	LIS(t_stack *stk_s, t_stack *stk_d)
+void	LIS(t_stack *stk_s, t_stack **stk_d)
 {
 	t_stack *dup;
 	t_stack **reg;
 	int	i;
 	int	j;
 
-	dup = stack_dup(stk_s);
+	dup = stack_dup(stk_s, stk_s->len);
 	while (min_in_stack(dup) != dup->data[0])
 	{
 		rotate(dup);
@@ -184,12 +186,11 @@ void	LIS(t_stack *stk_s, t_stack *stk_d)
 			{
 				free(reg[i]->data);
 				free(reg[i]);
-				reg[i] = stack_dup(reg[j]);
+				reg[i] = stack_dup(reg[j], dup->len);
 			}
 			j++;
 		}
-		print_stack(reg[0]);
-		printf("reg[i]->len %d\n", reg[i]->len);
+		print_stack(reg[i]);
 		reg[i]->data[reg[i]->len] = dup->data[i];
 		reg[i]->len++;
 		i++;
@@ -200,9 +201,9 @@ void	LIS(t_stack *stk_s, t_stack *stk_d)
 	{
 		j++;
 	}
-	free(stk_d->data);
-	free(stk_d);
-	stk_d = stack_dup(reg[j]);
+	free((*stk_d)->data);
+	free(*stk_d);
+	*stk_d = stack_dup(reg[j], reg[j]->len);
 	i = 0;
 	while (i < stk_s->len)
 	{
@@ -222,7 +223,7 @@ int	check_lis(t_stack *stk_a, t_stack *stk_b, t_stack *lis)
 	tmp->data = malloc(0);
 	tmp->len = 0;
 	push(stk_b, stk_a);
-	LIS(stk_a, tmp);
+	LIS(stk_a, &tmp);
 	if (tmp->len > lis->len)
 	{
 		free(lis->data);
@@ -249,7 +250,7 @@ void	sort(t_stack *stk_a)
 	stk_b->len = 0;
 	lis->data = malloc(0);
 	lis->len = 0;
-	LIS(stk_a, lis);
+	LIS(stk_a, &lis);
 	while (stk_a->len > lis->len)
 	{
 		if (stk_a->len > 0 && stk_b->len / stk_a->len > 25)
@@ -286,7 +287,7 @@ int main(int argc, char **argv)
 	sort(arrA);
 	return 1;
 
-	LIS(arrA, lis);
+	LIS(arrA, &lis);
 	
 	printf("LIS len %d\n", lis->len);
 	for (int i = 0; i < lis->len; i++)
