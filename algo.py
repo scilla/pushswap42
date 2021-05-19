@@ -136,15 +136,18 @@ def LIS(ST):
 if __name__ == '__main__':
 	globa_count = []
 	# seed(5)
-	items_count = 500
+	items_count = 10
 	or_stack_A = [i for i in range(items_count, 0, -1)]
-	# shuffle(or_stack_A)
+	or_stack_A = [i for i in range(items_count)]
 	# or_stack_A = [1, 5, 2, 4, 3]
-	shuffle(or_stack_A)
-	for i in range(1):
+	# shuffle(or_stack_A)
+	for k in range(1):
 		stack_A = or_stack_A + []
 		# stack_A, _ = rotateA(stack_A, None)
+		# stack_A, _ = rotateA(stack_A, None)
+		# stack_A, _ = rotateA(stack_A, None)
 		or_stack_A = stack_A + []
+		# shuffle(or_stack_A)
 		stack_B = []
 		move_count = 0
 		sel = []
@@ -164,21 +167,6 @@ if __name__ == '__main__':
 			slots = []
 			for i, n in enumerate(stack_A):
 				fc, bc = find_spot(stack_B, n, rev=True)
-				pairs.append([fc, bc])
-				if i < len(stack_A) / 2:
-					if n in sel:
-						forward.append(9999)
-						forward_inv.append(9999)
-					else:
-						forward.append(max([i, fc]))
-						forward_inv.append(i + bc)
-				else:
-					if n in sel:
-						backward.append(9999)
-						backward_inv.append(9999)
-					else:
-						backward.append(max([len(stack_A) - i, bc]))
-						backward_inv.append(i + fc)
 				if n in sel:
 					slots.append({
 						'data': [9999, 9999, 9999, 9999]
@@ -191,22 +179,19 @@ if __name__ == '__main__':
 			for i, s in enumerate(slots):
 				slots[i]['min'] = min(s['data'])
 				slots[i]['opind'] = s['data'].index((min(s['data'])))
-			opts = []
-			if len(backward):
-				ll_list = [forward, forward_inv, backward, backward_inv]
-			else:
-				ll_list = [forward, forward_inv]
-			for ll in ll_list:
-				res = min(ll)
-				opts.append(res)
 			slots_sorted = sorted(slots, key= lambda x: x['min'])
 			
 			def rotate_and_check(stack_A, stack_B, range_count, funct, bypass=False):
 				global move_count, sel
-				bypass = True
+				bypass = False
 				break_it = False
 				for _ in range(range_count):
-					if not bypass and len(stack_B) and (items_count * 1/8 > stack_B[0]):
+					# 1/10 41
+					# 1/20 45
+					# 1/25 47
+					# 1/30 56 57 49
+					# 1/40 51
+					if not bypass and len(stack_B) and (len(stack_B) >= items_count * (1 - 1/30)):
 						new_stackA = stack_A + []
 						new_stackA, _ = pushB(new_stackA, [stack_B[0]])
 						ll = LIS(new_stackA)
@@ -221,15 +206,11 @@ if __name__ == '__main__':
 				return break_it, stack_A, stack_B
 			
 			slot = slots_sorted[0]
-			# opt_ind = opts.index(min(opts))
 			opt_ind = slots_sorted[0]['opind']
 			# print(slot)
 			# print(stack_A)
 			# print(stack_B)
 			if opt_ind == 0:
-				ind_min = min(forward)
-				# moves_A = forward.index(ind_min)
-				# moves_B = pairs[forward.index(ind_min)][0]
 				moves_A = slot['moves'][2]
 				moves_B = slot['moves'][0]
 				if moves_A > moves_B:
@@ -247,9 +228,6 @@ if __name__ == '__main__':
 					if break_it:
 						continue
 			elif opt_ind == 1:
-				ind_min = min(forward_inv)
-				# moves_A = forward_inv.index(ind_min)
-				# moves_B = pairs[forward_inv.index(ind_min)][1]
 				moves_A = slot['moves'][2]
 				moves_B = slot['moves'][1]
 				break_it, stack_A, stack_B = rotate_and_check(stack_A, stack_B, moves_A, rotateA, bypass=False)
@@ -259,9 +237,6 @@ if __name__ == '__main__':
 				if break_it:
 					continue
 			elif opt_ind == 3:
-				ind_min = min(backward_inv)
-				# moves_A = backward_inv.index(ind_min)
-				# moves_B = pairs[backward_inv.index(ind_min)][0]
 				moves_A = slot['moves'][3]
 				moves_B = slot['moves'][0]
 				break_it, stack_A, stack_B = rotate_and_check(stack_A, stack_B, moves_A, inv_rotateA, bypass=True)
@@ -271,9 +246,6 @@ if __name__ == '__main__':
 				if break_it:
 					continue
 			else:
-				ind_min = min(backward)
-				# moves_A = backward[::-1].index(ind_min) + 1
-				# moves_B = pairs[::-1][backward[::-1].index(ind_min)][1]
 				moves_A = slot['moves'][3]
 				moves_B = slot['moves'][1]
 				if moves_A > moves_B:
@@ -313,7 +285,7 @@ if __name__ == '__main__':
 			stack_A, stack_B = pushB(stack_A, stack_B)
 			move_count += 1
 		move_count += int(items_count/2 - abs(stack_A[0] - items_count/2))
-		print(move_count)
+		print(k, move_count)
 		globa_count.append(move_count)
 		# print("aA", stack_A)
 		# print("aB", stack_B)
@@ -327,7 +299,7 @@ if __name__ == '__main__':
 	LIMIT = 5500
 	YES = 0
 	NO = 0
-	if items_count == 100:
+	if items_count <= 100:
 		LIMIT = 700
 	for x in globa_count:
 		if x <= LIMIT:

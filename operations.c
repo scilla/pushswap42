@@ -6,7 +6,7 @@
 /*   By: scilla <scilla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/18 16:02:00 by scilla            #+#    #+#             */
-/*   Updated: 2021/05/18 19:17:30 by scilla           ###   ########.fr       */
+/*   Updated: 2021/05/19 18:01:47 by scilla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,269 +14,308 @@
 #include <stdio.h>
 #include "main.h"
 
-void	rotate(int *stack, int len)
+void	rotate(t_stack *stk)
 {
 	int	tmp;
 	int	i;
 
-	if (!len)
+	if (!stk->len)
 		return ;
 	i = 0;
-	tmp = stack[0];
-	while (i < len - 1)
+	tmp = stk->data[0];
+	while (i < stk->len - 1)
 	{
-		stack[i] = stack[i + 1];
+		stk->data[i] = stk->data[i + 1];
 		i++;
 	}
-	stack[i] = tmp;
+	stk->data[i] = tmp;
 }
 
-void	inv_rotate(int *stack, int len)
+void	inv_rotate(t_stack *stk)
 {
 	int	tmp;
 	int	i;
 
-	if (!len)
+	if (!stk->len)
 		return ;
-	i = len - 1;
-	tmp = stack[len - 1];
+	i = stk->len - 1;
+	tmp = stk->data[stk->len - 1];
 	while (i > 0)
 	{
-		stack[i] = stack[i - 1];
+		stk->data[i] = stk->data[i - 1];
 		i--;
 	}
-	stack[0] = tmp;
+	stk->data[0] = tmp;
 }
 
-void	rr(int **stackA, int **stackB, int *lenA, int *lenB)
+void	rr(t_stack *stk_a, t_stack * stk_b)
 {
-	rotate(*stackA, *lenA);
-	rotate(*stackB, *lenB);
+	rotate(stk_a);
+	rotate(stk_b);
 }
 
-void	rrr(int **stackA, int **stackB, int *lenA, int *lenB)
+void	rrr(t_stack *stk_a, t_stack * stk_b)
 {
-	inv_rotate(*stackA, *lenA);
-	inv_rotate(*stackB, *lenB);
+	inv_rotate(stk_a);
+	inv_rotate(stk_b);
 }
 
-void	push(int **src, int **dst, int *len_src, int *len_dst)
+void	push(t_stack *stk_s, t_stack *stk_d)
 {
 	int	*new_src;
 	int	*new_dst;
 	int	i;
 	
-	if (!len_src)
+	if (!stk_s->len)
 		return ;
-	new_src = malloc(sizeof(int) * (*len_src - 1));
-	new_dst = malloc(sizeof(int) * (*len_dst + 1));
-	new_dst[0] = (*src)[0];
-	i = *len_src;
+	new_src = malloc(sizeof(int) * (stk_s->len - 1));
+	new_dst = malloc(sizeof(int) * (stk_d->len + 1));
+	new_dst[0] = stk_s->data[0];
+	i = stk_s->len;
 	while (i > 0)
 	{
-		new_src[i - 2] = (*src)[i - 1];
+		new_src[i - 2] = stk_s->data[i - 1];
 		i--;
 	}
-	i = *len_dst;
+	i = stk_d->len;
 	while (i > 0)
 	{
-		new_dst[i] = (*dst)[i - 1];
+		new_dst[i] = stk_d->data[i - 1];
 		i--;
 	}
-	free(*src);
-	free(*dst);
-	*src = new_src;
-	*dst = new_dst;
-	(*len_dst)++;
-	(*len_src)--;
+	free(stk_s->data);
+	free(stk_d->data);
+	stk_s->data = new_src;
+	stk_d->data= new_dst;
+	stk_d->len++;
+	stk_s->len--;
 }
 
-int	min_in_stack(int *stack, int len)
+int	min_in_stack(t_stack *stack)
 {
 	int res;
 	int	i;
 	
-	res = stack[0];
+	res = stack->data[0];
 	i = 0;
-	while (i < len)
+	while (i < stack->len)
 	{
-		if (stack[i] < res)
-			res = stack[i];
+		if (stack->data[i] < res)
+			res = stack->data[i];
 		i++;
 	}
 	return (res);
 }
 
-int	max_in_stack(int *stack, int len)
+int	max_in_stack(t_stack **stack, int len)
 {
 	int res;
 	int	i;
 	
-	res = stack[0];
+	res = stack[0]->len;
 	i = 0;
 	while (i < len)
 	{
-		if (stack[i] > res)
-			res = stack[i];
+		if (stack[i]->data[i] > res)
+			res = stack[i]->len;
 		i++;
 	}
 	return (res);
 }
 
-int	*stack_dup(int *src, int len)
+t_stack	*stack_dup(t_stack *src)
 {
-	int	*dst;
+	t_stack	*dst;
+	int		i;
 	
-	dst = malloc(sizeof(int) * len);
-	while (len > 0)
+	dst = malloc(sizeof(t_stack));
+	dst->data = malloc(sizeof(int) * src->len);
+	dst->len = src->len;
+	i = src->len;
+	while (i > 0)
 	{
-		len--;
-		dst[len] = src[len];
+		i--;
+		dst->data[i] = src->data[i];
 	}
 	return (dst);
 }
-void	print_stack(int *src, int len)
+void	print_stack(t_stack *src)
 {
 	int i;
 	
 	i = 0;
-	while (i < len)
+	while (i < src->len)
 	{
-		printf("%d\n", src[i]);
+		printf("%d\n", src->data[i]);
 		i++;
 	}
 }
 
-void	LIS(int *src, int **dst, int src_len, int *dst_len)
+void	LIS(t_stack *stk_s, t_stack *stk_d)
 {
-	int *dup;
-	int **reg;
-	int	*reg_lens;
+	t_stack *dup;
+	t_stack **reg;
 	int	i;
 	int	j;
 
-	dup = stack_dup(src, src_len);
-	while (min_in_stack(dup, src_len) != dup[0])
+	dup = stack_dup(stk_s);
+	while (min_in_stack(dup) != dup->data[0])
 	{
-		rotate(dup, src_len);
+		rotate(dup);
 	}
-	reg = malloc(sizeof(int *) * src_len);
-	reg_lens = malloc(sizeof(int) * src_len);
+	reg = malloc(sizeof(t_stack *) * dup->len);
 	i = 0;
-	while (i < src_len)
+	while (i < stk_s->len)
 	{
-		reg[i] = malloc(sizeof(int) * src_len);
-		reg_lens[i] = 0;
+		reg[i] = malloc(sizeof(t_stack));
+		reg[i]->data = malloc(sizeof(int) * (dup->len));
+		reg[i]->len = 0;
 		i++;
 	}
-	reg[0][0] = dup[0];
-	reg_lens[0]++;
+	reg[0]->data[0] = dup->data[0];
+	reg[0]->len++;
 	i = 1;
-	while (i < src_len)
+	while (i < dup->len)
 	{
 		j = 0;
 		while (j < i)
 		{
-			if (dup[j] < dup[i] && reg_lens[i] < reg_lens[j])
+			if (dup->data[j] < dup->data[i] && reg[i]->len < reg[j]->len)
 			{
+				free(reg[i]->data);
 				free(reg[i]);
-				reg[i] = stack_dup(reg[j], reg_lens[j]);
-				reg_lens[i] = reg_lens[j];
+				reg[i] = stack_dup(reg[j]);
 			}
 			j++;
 		}
-		reg[i][reg_lens[i]] = dup[i];
-		reg_lens[i]++;
+		print_stack(reg[0]);
+		printf("reg[i]->len %d\n", reg[i]->len);
+		reg[i]->data[reg[i]->len] = dup->data[i];
+		reg[i]->len++;
 		i++;
 	}
-	i = max_in_stack(reg_lens, src_len);
+	i = max_in_stack(reg, dup->len);
 	j = 0;
-	while (i != reg_lens[j])
+	while (i != reg[j]->len)
+	{
 		j++;
-	*dst = stack_dup(reg[j], reg_lens[j]);
-	*dst_len = reg_lens[j];
+	}
+	free(stk_d->data);
+	free(stk_d);
+	stk_d = stack_dup(reg[j]);
 	i = 0;
-	while (i < src_len)
+	while (i < stk_s->len)
 	{
 		free(reg[i]);
 		i++;
 	}
 	free(reg);
-	free(reg_lens);
+	free(dup->data);
+	free(dup);
 }
 
-void	sort(int **stackA, int lenA)
+int	check_lis(t_stack *stk_a, t_stack *stk_b, t_stack *lis)
 {
-	t_stack	*A;
-	t_stack *B;
-	t_stack *lis;
+	t_stack *tmp;
 	
-	B = malloc(sizeof(t_stack));
-	A = malloc(sizeof(t_stack));
-	lis = malloc(sizeof(t_stack));
-	A->data = *stackA;
-	A->len = lenA;
-	B->data = malloc(0);
-	B->len = 0;
-	LIS(A->data, &lis->data, A->len, &lis->len);
-	while (A->len > lis->len)
+	tmp = malloc(sizeof(t_stack));
+	tmp->data = malloc(0);
+	tmp->len = 0;
+	push(stk_b, stk_a);
+	LIS(stk_a, tmp);
+	if (tmp->len > lis->len)
 	{
-		push(&A->data, &B->data, &A);
+		free(lis->data);
+		lis->data = tmp->data;
+		lis->len = tmp->len;
+		free(tmp);
+		return (1);
 	}
+	push(stk_a, stk_b);
+	free(tmp->data);
+	free(tmp);
+	return (0);
+}
+
+void	sort(t_stack *stk_a)
+{
+	t_stack *stk_b;
+	t_stack *lis;
+	t_stack	*dup;
 	
+	stk_b = malloc(sizeof(t_stack));
+	lis = malloc(sizeof(t_stack));
+	stk_b->data = malloc(0);
+	stk_b->len = 0;
+	lis->data = malloc(0);
+	lis->len = 0;
+	LIS(stk_a, lis);
+	while (stk_a->len > lis->len)
+	{
+		if (stk_a->len > 0 && stk_b->len / stk_a->len > 25)
+		{
+			if (check_lis(stk_a, stk_a, lis))
+				continue ;
+		}
+		break ;
+	}
 }
 
 int main(int argc, char **argv)
 {
-	int	*arrA;
-	int	*arrB;
-	int	**lis;
+	t_stack	*arrA;
+	t_stack	*arrB;
+	t_stack	*lis;
 	int	lis_len;
 	
-	lis = malloc(sizeof(int*));
-	arrA = malloc(sizeof(int) * 6);
-	arrB = malloc(0);
+	arrA = malloc(sizeof(t_stack));
+	arrB = malloc(sizeof(t_stack));
+	lis = malloc(sizeof(t_stack));
+	arrA->data = malloc(sizeof(int) * 4);
+	arrA->len = 4;
+	arrB->data = malloc(0);
+	arrB->len = 0;
+	lis->data = malloc(0);
+	lis->len = 0;
 	
-	arrA[0] = atoi(argv[1]);
-	arrA[1] = atoi(argv[2]);
-	arrA[2] = atoi(argv[3]);
-	arrA[3] = atoi(argv[4]);
+	arrA->data[0] = atoi(argv[1]);
+	arrA->data[1] = atoi(argv[2]);
+	arrA->data[2] = atoi(argv[3]);
+	arrA->data[3] = atoi(argv[4]);
 
-	sort(&arrA, 4);
+	sort(arrA);
 	return 1;
 
-	LIS(arrA, lis, 4, &lis_len);
+	LIS(arrA, lis);
 	
-	printf("LIS len %d\n", lis_len);
-	for (int i = 0; i < lis_len; i++)
+	printf("LIS len %d\n", lis->len);
+	for (int i = 0; i < lis->len; i++)
 	{
-		printf("LIS %d\n", (*lis)[i]);
+		printf("LIS %d\n", lis->data[i]);
 	}
 	return (1);
 	
-
-	int arr_lenA = 4;
-	int arr_lenB = 0;
 	
-	for (int i = 0; i < arr_lenA; i++)
+	for (int i = 0; i < arrA->len; i++)
 	{
-		printf("A %d\n", arrA[i]);
+		printf("A %d\n", arrA->data[i]);
 	}
-	for (int i = 0; i < arr_lenB; i++)
+	for (int i = 0; i < arrB->len; i++)
 	{
-		printf("B %d\n", arrB[i]);
+		printf("B %d\n", arrB->data[i]);
 	}
 	
-	printf("PUSHAAAAaa\n");
-	push(&arrA, &arrB, &arr_lenA, &arr_lenB);
-	push(&arrA, &arrB, &arr_lenA, &arr_lenB);
+	printf("PUstkHAAAAaa\n");
+	push(arrA, arrB);
+	push(arrA, arrB);
 
-	for (int i = 0; i < arr_lenA; i++)
+	for (int i = 0; i < arrA->len; i++)
 	{
-		printf("A %d\n", arrA[i]);
-	}for (int i = 0; i < arr_lenB; i++)
+		printf("A %d\n", arrA->data[i]);
+	}
+	for (int i = 0; i < arrB->len; i++)
 	{
-		printf("B %d\n", arrB[i]);
+		printf("B %d\n", arrB->data[i]);
 	}
 	return 1;
 }
