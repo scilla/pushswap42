@@ -6,7 +6,7 @@
 /*   By: scilla <scilla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/18 16:02:00 by scilla            #+#    #+#             */
-/*   Updated: 2021/05/19 18:15:56 by scilla           ###   ########.fr       */
+/*   Updated: 2021/05/19 18:17:14 by scilla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,7 +190,6 @@ void	LIS(t_stack *stk_s, t_stack **stk_d)
 			}
 			j++;
 		}
-		print_stack(reg[i]);
 		reg[i]->data[reg[i]->len] = dup->data[i];
 		reg[i]->len++;
 		i++;
