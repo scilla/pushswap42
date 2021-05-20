@@ -35,16 +35,16 @@ int check_integer(char *tmp)
     return(1);
 }
 
-int check_double_int(int *stack_a)
+int check_double_int(int *stack_a, int size)
 {
     int i;
 	int j;
 
     i = 0;
-    while(stack_a[i])
+    while(i < size)
     {
         j = 0;
-        while(stack_a[j])
+        while(j < size)
         {
 			if(stack_a[j] == stack_a[i])
 			{
@@ -82,14 +82,13 @@ void check_single_arg(int *stack_a, int ac, char **av)
         }
     }
     free_matrix(tmp);
-    if(check_double_int(stack_a))
+    if(check_double_int(stack_a, ac - 1))
         ft_error(stack_a);
 }
 
 int main(int ac, char**av)
 {
     int *stack_a;
-    //int *stack_b;
     int i;
     int k;
 
@@ -97,7 +96,7 @@ int main(int ac, char**av)
     {
         if(ac == 2)
 		{
-			stack_a = ft_calloc(sizeof(int), ac - 1);
+			stack_a = (int *)malloc(sizeof(int) * ac - 1);
             check_single_arg(stack_a, ac, av);
 		}
         else
@@ -105,7 +104,7 @@ int main(int ac, char**av)
     }
     else
     {
-        stack_a = malloc(sizeof(int) * (ac - 1));
+        stack_a = (int *)malloc(sizeof(int) * (ac - 1));
         i = 1;
         k = 0;
         while(i < ac && check_integer(av[i]))
@@ -119,11 +118,11 @@ int main(int ac, char**av)
             else
                 ft_error(stack_a);
         }
-        if(check_double_int(stack_a))
+        if(check_double_int(stack_a, ac - 1))
             ft_error(stack_a);
     }
    // printf("OK\n");
-	start_checker(stack_a);
+	start_checker(stack_a, ac - 1);
 	free(stack_a);
 	stack_a = NULL;
 	return(0);

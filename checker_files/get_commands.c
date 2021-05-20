@@ -6,11 +6,33 @@
 /*   By: vbuonvin <vbuonvin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 18:58:34 by vbuonvin          #+#    #+#             */
-/*   Updated: 2021/05/19 16:47:29 by vbuonvin         ###   ########.fr       */
+/*   Updated: 2021/05/20 14:35:29 by vbuonvin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../push_swap.h"
+
+void print_stack(t_list *stack_a, t_list *stack_b)
+{
+	if(stack_a)
+	{
+		printf("STACK A\n");
+		while(stack_a)
+		{
+			printf("INDEX: %d		NUMBER: %d\n", stack_a->index, stack_a->nb);
+			stack_a = stack_a->next;
+		}
+	}
+	if(stack_b)
+	{
+		printf("STACK B\n");
+		while(stack_b)
+		{
+			printf("INDEX: %d		NUMBER: %d\n", stack_b->index, stack_b->nb);
+			stack_b = stack_b->next;
+		}
+	}
+}
 
 void activate_command_2(char *cmd, t_list **stack_a, t_list **stack_b)
 {
@@ -58,11 +80,7 @@ void give_result(t_list *stack_a, t_list *stack_b)
 
 	i = 1;
 	tmp_b = stack_b;
-	if (tmp_b != NULL)
-	{
-		write(1, "KO\n", 3);
-	}
-	if(stack_a)
+	if(stack_a && !tmp_b)
 	{
 		while(stack_a->next)
 		{
@@ -77,6 +95,8 @@ void give_result(t_list *stack_a, t_list *stack_b)
 		if(stack_a->next == NULL)
 			write(1, "OK\n", 3);
 	}
+	if (tmp_b != NULL)
+		write(1, "KO\n", 3);
 }
 
 void receive_commands(t_list **stack_a,t_list **stack_b)
@@ -96,6 +116,6 @@ void receive_commands(t_list **stack_a,t_list **stack_b)
 			activate_command_1(*cmd, stack_a, stack_b);
 		else
 			write(1, "Command does not exist\n", ft_strlen("Command does not exist\n"));
-		//print_stack(*stack_a, *stack_b);
+		print_stack(*stack_a, *stack_b);
 	}
 }

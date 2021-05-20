@@ -6,12 +6,12 @@ void free_stack(t_list **stack)
 	
 	tmp = *stack;
 	
-	while((*stack)->next)
+	while(*stack)
 	{
-		*stack = (*stack)->next;
+		//*stack = (*stack)->next;
 		free(tmp->next);
 		tmp->next = NULL;
-		//*stack = (*stack)->next;
+		*stack = (*stack)->next;
 	}
 }
 
