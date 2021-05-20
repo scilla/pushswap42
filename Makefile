@@ -4,9 +4,10 @@ NAME_CHECKER = checker
 CC 		= gcc
 CFLAGS	= -Wall -Wextra -Werror
 
-PUSH_SRCS =	main.c
+PUSH_SRCS =	parser.c				\
+			main.c				\
 
-PUSH_DIR = 	./push_swap
+PUSH_DIR = 	./push_swap_files
 
 CHECKER_SRCS =	main.c				\
 				get_commands.c		\

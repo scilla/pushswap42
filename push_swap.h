@@ -6,7 +6,7 @@
 /*   By: vbuonvin <vbuonvin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/04 13:54:48 by vbuonvin          #+#    #+#             */
-/*   Updated: 2021/05/20 14:26:19 by vbuonvin         ###   ########.fr       */
+/*   Updated: 2021/05/20 16:17:47 by vbuonvin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,12 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+
+typedef struct	s_stack
+{
+	int	*data;
+	int	len;
+}				t_stack;
 
 /*
 **	CHECKER
@@ -30,5 +36,11 @@ void	push_on_b(t_list **stack_a, t_list **stack_b);
 void	rotate_stack(t_list **stack);
 void	reverse_rotate(t_list **stack);
 void	free_stack(t_list **stack);
+
+/*
+** PUSH SWAP
+*/
+
+t_stack *parser(int ac, char **av);
 
 # endif
