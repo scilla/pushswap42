@@ -45,6 +45,8 @@ int	check_in_lis(int value, t_stack *lis)
 	i = 0;
 	while (i < lis->len)
 	{
+
+		printf("cil %d %d %d\n", value, lis->data[i], lis->len);
 		if (value == lis->data[i])
 			return (1);
 		i++;
@@ -165,6 +167,7 @@ t_moves	*predict_moves(t_stack *stk_a, t_stack *stk_b, t_stack *lis)
 	best->abs_moves = 9999;
 	while (i < stk_a->len)
 	{
+		printf("protect? %d %d %d\n", stk_a->data[i], i, check_in_lis(stk_a->data[i], lis));
 		if (check_in_lis(stk_a->data[i], lis))
 		{
 			i++;

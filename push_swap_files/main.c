@@ -1,5 +1,15 @@
 #include "../push_swap.h"
 
+void	swap(t_stack *stk, t_stack *fuffa)
+{
+	int tmp;
+
+	(void)fuffa;
+	tmp = stk->data[0];
+	stk->data[0] = stk->data[1];
+	stk->data[1] = tmp;
+}
+
 void	rotate(t_stack *stk,  t_stack *fuffa)
 {
 	int	tmp;
@@ -83,7 +93,7 @@ int	min_stack(t_stack *stack)
 {
 	int res;
 	int	i;
-	
+
 	res = stack->data[0];
 	i = 0;
 	while (i < stack->len)
@@ -99,25 +109,25 @@ int	max_stack(t_stack **stack, int len)
 {
 	int res;
 	int	i;
-	
+
 	res = stack[0]->len;
 	i = 0;
 	while (i < len)
 	{
-		if (stack[i]->data[i] > res)
+		if (stack[i]->len > res)
 			res = stack[i]->len;
 		i++;
 	}
 	return (res);
 }
 
-t_stack	*stack_dup(t_stack *src, int len)
+t_stack	*stack_dup(t_stack *src)
 {
 	t_stack	*dst;
 	int		i;
 	
 	dst = malloc(sizeof(t_stack));
-	dst->data = malloc(sizeof(int) * len);
+	dst->data = malloc(sizeof(int) * src->len);
 	dst->len = src->len;
 	i = src->len;
 	while (i > 0)
@@ -148,12 +158,10 @@ void	LIS(t_stack *stk_s, t_stack **stk_d)
 	int	i;
 	int	j;
 
-	dup = stack_dup(stk_s, stk_s->len);
+	dup = stack_dup(stk_s);
 	while (min_stack(dup) != dup->data[0])
-	{
 		rotate(dup, dup);
-	}
-	reg = malloc(sizeof(t_stack *) * dup->len);
+	reg = malloc(sizeof(t_stack *) * (dup->len));
 	i = 0;
 	while (i < stk_s->len)
 	{
@@ -174,7 +182,7 @@ void	LIS(t_stack *stk_s, t_stack **stk_d)
 			{
 				free(reg[i]->data);
 				free(reg[i]);
-				reg[i] = stack_dup(reg[j], dup->len);
+				reg[i] = stack_dup(reg[j]);
 			}
 			j++;
 		}
@@ -190,7 +198,7 @@ void	LIS(t_stack *stk_s, t_stack **stk_d)
 	}
 	free((*stk_d)->data);
 	free(*stk_d);
-	*stk_d = stack_dup(reg[j], reg[j]->len);
+	*stk_d = stack_dup(reg[j]);
 	i = 0;
 	while (i < stk_s->len)
 	{
@@ -225,30 +233,6 @@ int	check_lis(t_stack *stk_a, t_stack *stk_b, t_stack *lis)
 	return (0);
 }
 
-void	sort(t_stack *stk_a)
-{
-	t_stack *stk_b;
-	t_stack *lis;
-	//t_stack	*dup;
-	
-	stk_b = malloc(sizeof(t_stack));
-	lis = malloc(sizeof(t_stack));
-	stk_b->data = malloc(0);
-	stk_b->len = 0;
-	lis->data = malloc(0);
-	lis->len = 0;
-	LIS(stk_a, &lis);
-	while (stk_a->len > lis->len)
-	{
-		if (stk_a->len > 0 && stk_b->len / stk_a->len > 25)
-		{
-			if (check_lis(stk_a, stk_a, lis))
-				continue ;
-		}
-		break ;
-	}
-}
-
 void loop_move(int n, void (*f)(t_stack *, t_stack *), t_stack *stk_a, t_stack *stk_b)
 {
 	while (n--)
@@ -264,13 +248,17 @@ int	make_moves(t_moves *to_do, t_stack *stk_a, t_stack *stk_b)
 		if (to_do->moves_a > to_do->moves_b)
 		{
 			loop_move(to_do->moves_b, &rr, stk_a, stk_b);
+			printf("rr %d\n", to_do->moves_b);
 			loop_move(to_do->moves_a - to_do->moves_b, &rotate, stk_a, stk_a);
+			printf("ra %d\n", to_do->moves_a - to_do->moves_b);
 			count = to_do->moves_a;
 		}
 		else
 		{
 			loop_move(to_do->moves_a, &rr, stk_a, stk_b);
+			printf("rr %d\n", to_do->moves_a);
 			loop_move(to_do->moves_b - to_do->moves_a, &rotate, stk_b, stk_b);
+			printf("rb %d\n", to_do->moves_b - to_do->moves_a);
 			count = to_do->moves_b;
 		}
 	}
@@ -279,26 +267,34 @@ int	make_moves(t_moves *to_do, t_stack *stk_a, t_stack *stk_b)
 		if (to_do->moves_a > to_do->moves_b)
 		{
 			loop_move(to_do->moves_b, &rrr, stk_a, stk_b);
+			printf("rrr %d\n", to_do->moves_b);
 			loop_move(to_do->moves_a - to_do->moves_b, &inv_rotate, stk_a, stk_a);
+			printf("rra %d\n", to_do->moves_a - to_do->moves_b);
 			count = to_do->moves_a;
 		}
 		else
 		{
 			loop_move(to_do->moves_a, &rrr, stk_a, stk_b);
+			printf("rrr %d\n", to_do->moves_a);
 			loop_move(to_do->moves_b - to_do->moves_a, &inv_rotate, stk_b, stk_b);
+			printf("rrb %d\n", to_do->moves_b - to_do->moves_a);
 			count = to_do->moves_b;
 		}
 	}
 	if (to_do->opt_code == 1)
 	{
 		loop_move(to_do->moves_a, &rotate, stk_a, stk_a);
+		printf("ra %d\n", to_do->moves_a);
 		loop_move(to_do->moves_b, &inv_rotate, stk_b, stk_b);
+		printf("rrb %d\n", to_do->moves_b);
 		count = to_do->moves_a + to_do->moves_b;
 	}
 	if (to_do->opt_code == 2)
 	{
 		loop_move(to_do->moves_b, &rotate, stk_b, stk_b);
+		printf("rb %d\n", to_do->moves_b);
 		loop_move(to_do->moves_a, &inv_rotate, stk_a, stk_a);
+		printf("rra %d\n", to_do->moves_a);
 		count = to_do->moves_a + to_do->moves_b;
 	}
 	return (count);
@@ -309,56 +305,87 @@ int main(int argc, char **argv)
 	t_stack *arrA;
 	t_stack *arrB;
 	t_stack *lis;
+	t_stack *dup;
+	t_stack *dup_lis;
 	t_moves *to_do;
 	int count;
 	int spot;
 
+	(void)dup;
 	count = 0;
 	arrA = parser(argc, argv);
 	arrB = malloc(sizeof(t_stack));
 	lis = malloc(sizeof(t_stack));
+	dup_lis = malloc(sizeof(t_stack));
 	arrB->data = malloc(0);
 	arrB->len = 0;
 	lis->data = malloc(0);
 	lis->len = 0;
-	if (arrA->len > 5)
-	{
-		while (arrA->len > lis->len)
+	dup_lis->data = malloc(0);
+	dup_lis->len = 0;
+	LIS(arrA, &lis);
+//	if (arrA->len > 0)
+//	{
+		while (arrA->len > lis->len) // TODO: fix lis with swap
 		{
+			print_stack(arrA);
+			print_stack(lis);
+			dup = stack_dup(arrA);
+			swap(dup, dup);
+			LIS(dup, &dup_lis);
+			if (dup_lis->len > lis->len)
+			{
+				free(lis->data);
+				lis->len = dup_lis->len;
+				lis->data = dup_lis->data;
+				swap(arrA, arrA);
+				printf("sw %d\n", 1);
+				count++;
+				continue ;
+			}
 			to_do = predict_moves(arrA, arrB, lis);
 			count += make_moves(to_do, arrA, arrB);
 			push(arrA, arrB);
+			printf("pa %d\n", 1);
 			count++;
 		}
 		while (arrB->len)
 		{
 			spot = find_inv_spot(arrA, arrB->data[0]);
-			if (spot < arrA->len / 2)
+			if (spot < arrA->len / 2.0)
 			{
 				loop_move(spot, &rotate, arrA, arrA);
+				printf("ra %d\n", spot);
 				count += spot;
 			}
 			else
 			{
 				loop_move(arrA->len - spot, &inv_rotate, arrA, arrA);
+				printf("rra %d\n", arrA->len - spot);
 				count += arrA->len - spot;
 			}
 			push(arrB, arrA);
+			printf("pb %d\n", 1);
 			count++;
 		}
 		spot = min_in_arr(*arrA);
-		if (spot < arrA->len / 2)
+		if (spot < arrA->len / 2.0)
 		{
 			loop_move(spot, &rotate, arrA, arrA);
+			printf("ra %d\n", spot);
 			count += spot;
 		}
 		else
 		{
 			loop_move(arrA->len - spot, &inv_rotate, arrA, arrA);
+			printf("rra %d\n", arrA->len - spot);
 			count += arrA->len - spot;
 		}
-	}
+//	}
 	print_stack(arrA);
+	free(arrB->data);
+	free(arrB);
+	//free(to_do);
 	printf("mosse : %d\n", count);
 	return 1;
 }
