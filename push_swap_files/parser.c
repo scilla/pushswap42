@@ -111,7 +111,7 @@ t_stack *parser(int ac, char **av)
 		i = 1;
 		k = 0;
 		stack_a->len = ac - 1;
-		while(i < ac && check_integer(av[i]))
+		while(i < ac)
 		{
 			if(check_integer(av[i]))
 			{
