@@ -1,5 +1,6 @@
 from math import floor
 from random import Random, shuffle, random, choice, seed
+from functools import lru_cache, cache
 
 def pushA(stack_A, stack_B):
 	if len(stack_A):
@@ -111,18 +112,26 @@ def find_spot(stack: list, n: int, rev=False):
 			effort += 1
 	return effort, len(stack) - effort
 
-def LIS(ST):
+def LIS(ST, rev=False) -> list:
 	res = []
 	A = ST + []
-	while min(A) != A[0]:
-		A, _ = rotateA(A, None)
+	if not rev:
+		while min(A) != A[0]:
+			A, _ = rotateA(A, None)
+	else:
+		while max(A) != A[0]:
+			A, _ = rotateA(A, None)
 	L = list()
 	for i in range(0, len(A)):
 		L.append(list())
 	L[0].append(A[0])
 	for i in range(1, len(A)):
 		for j in range(0, i):
-			if (A[j] < A[i]) and (len(L[i]) < len(L[j])):
+			if not rev:
+				check = (A[j] < A[i])
+			else:
+				check = (A[j] > A[i])
+			if check and (len(L[i]) < len(L[j])):
 				'throw the previous list'
 				L[i] = []
 				'add all elements of L[j] to L[i]'
@@ -133,142 +142,222 @@ def LIS(ST):
 			res = L[i]
 	return res
 
+def find_spot_lis(stack: list, n: int, rev=False):
+	if len(stack) < 2:
+		return 0, 0
+	best_lis = LIS(stack, rev)
+	for i in range(len(stack)):
+		new_stack = stack + []
+		inverted = False
+		if i < len(stack)/ 2:
+			for _ in range(i):
+					new_stack, _ = rotateA(new_stack, None)
+		else:
+			i = len(stack) - i
+			inverted = True
+			for _ in range(i):
+				new_stack, _ = inv_rotateA(new_stack, None)
+		new_stack, _ = pushB(new_stack, [n])
+		if len(LIS(new_stack, rev)) > len(best_lis):
+			if not inverted:
+				return i, len(stack) - i
+			else:
+				return len(stack) - i, i
+			break
+
+def rotate_and_check(stack_A, stack_B, range_count, funct, lis):
+	move_count = 0
+	break_it = False
+	for _ in range(range_count):
+		# 1/10 41
+		# 1/20 45
+		# 1/25 47
+		# 1/30 56 57 49
+		# 1/40 51
+		# if len(stack_B) and len(stack_B) >= items_count * (1 - 1/30):
+		if len(stack_A) and len(stack_B):
+			new_stackA = stack_A + []
+			new_stackA, _ = pushB(new_stackA, [stack_B[0]])
+			ll = LIS(new_stackA)
+			# print(len(ll), len(lis), stack_B[0], stack_A == new_stackA)
+			if len(ll) > len(lis):
+				print('push early')
+				lis = ll
+				stack_A, stack_B = pushB(stack_A, stack_B)
+				move_count += 1
+				return stack_A, stack_B, move_count, lis, True
+			new_stackA = stack_A + []
+			new_stackB = stack_B + []
+			lla = LIS(new_stackA)
+			llb = LIS(new_stackB)
+			new_stackA, new_stackB = swapA_swapB(new_stackA, new_stackB)
+			new_lla = LIS(new_stackA)
+			new_llb = LIS(new_stackB)
+			# print(len(ll), len(lis), stack_B[0], stack_A == new_stackA)
+			if len(new_lla) + len(new_llb) > len(lla) + len(llb):
+				lis = new_lla
+				stack_A = new_stackA
+				stack_B = new_stackB
+				print('swapped')
+				move_count += 1
+				return stack_A, stack_B, move_count, lis, True
+		stack_A, stack_B = funct(stack_A, stack_B)
+		move_count += 1
+	return stack_A, stack_B, move_count, lis, break_it
+
+def move_redux(mm):
+	if mm:
+		mm -= 1
+	return mm
+
+def next_op(slot, stack_A, stack_B, lis, move_count_in):
+	global items_count
+	opt_ind = slot['opind']
+	mta = 0
+	for _ in range(1):
+		if opt_ind == 0:
+			moves_A = slot['moves'][2]
+			moves_B = slot['moves'][0]
+			if moves_A > moves_B:
+				stack_A, stack_B, mta, lis, break_it = rotate_and_check(stack_A, stack_B, moves_B, rr, lis)
+				if break_it:
+					break
+				move_count_in += mta
+				stack_A, stack_B, mta, lis, break_it = rotate_and_check(stack_A, stack_B, moves_A - moves_B, rotateA, lis)
+				if break_it:
+					break
+				move_count_in += mta
+			else:
+				stack_A, stack_B, mta, lis, break_it = rotate_and_check(stack_A, stack_B, moves_A, rr, lis)
+				if break_it:
+					break
+				move_count_in += mta
+				mm = moves_B - moves_A
+				mm = move_redux(mm)
+				stack_A, stack_B, mta, lis, break_it = rotate_and_check(stack_A, stack_B, mm, rotateB, lis)
+				if break_it:
+					break
+				move_count_in += mta
+		elif opt_ind == 1:
+			moves_A = slot['moves'][2]
+			moves_B = slot['moves'][1]
+			stack_A, stack_B, mta, lis, break_it = rotate_and_check(stack_A, stack_B, moves_A, rotateA, lis)
+			if break_it:
+				break
+			move_count_in += mta
+			mm = moves_B
+			mm = move_redux(mm)
+			stack_A, stack_B, mta, lis, break_it = rotate_and_check(stack_A, stack_B, mm, inv_rotateB, lis)
+			if break_it:
+				break
+			move_count_in += mta
+		elif opt_ind == 3:
+			moves_A = slot['moves'][3]
+			moves_B = slot['moves'][0]
+			stack_A, stack_B, mta, lis, break_it = rotate_and_check(stack_A, stack_B, moves_A, inv_rotateA, lis)
+			if break_it:
+				break
+			move_count_in += mta
+			mm = moves_B
+			mm = move_redux(mm)
+			stack_A, stack_B, mta, lis, break_it = rotate_and_check(stack_A, stack_B, mm, rotateB, lis)
+			if break_it:
+				break
+			move_count_in += mta
+		else:
+			moves_A = slot['moves'][3]
+			moves_B = slot['moves'][1]
+			if moves_A > moves_B:
+				stack_A, stack_B, mta, lis, break_it = rotate_and_check(stack_A, stack_B, moves_B, rrr, lis)
+				if break_it:
+					break
+				move_count_in += mta
+				stack_A, stack_B, mta, lis, break_it = rotate_and_check(stack_A, stack_B, moves_A - moves_B, inv_rotateA, lis)
+				if break_it:
+					break
+				move_count_in += mta
+			else:
+				stack_A, stack_B, mta, lis, break_it = rotate_and_check(stack_A, stack_B, moves_A, rrr, lis)
+				if break_it:
+					break
+				move_count_in += mta
+				mm = moves_B - moves_A
+				mm = move_redux(mm)
+				stack_A, stack_B, mta, lis, break_it = rotate_and_check(stack_A, stack_B, mm, inv_rotateB, lis)
+				if break_it:
+					break
+				move_count_in += mta
+	if not break_it:
+		stack_A, stack_B = pushA(stack_A, stack_B)
+		move_count_in += 1
+	return stack_A, stack_B, lis, move_count_in
+
+
+def get_slots(stack_A, stack_B, lis):
+	slots = []
+	for i, n in enumerate(stack_A):
+		fc, bc = find_spot_lis(stack_B, n, rev=True)
+		if n in lis:
+			slots.append({
+				'data': [9999, 9999, 9999, 9999]
+			})
+		else:
+			slots.append({
+				'data': [max([i, fc]), i + bc, max([len(stack_A) - i, bc]), i + fc]
+			})
+		slots[-1]['moves'] = [fc, bc, i, len(stack_A) - i]
+	for i, s in enumerate(slots):
+		slots[i]['min'] = min(s['data'])
+		slots[i]['opind'] = s['data'].index((min(s['data'])))
+	slots_sorted = sorted(slots, key= lambda x: x['min'])
+	return slots_sorted
+
+items_count = 5
 if __name__ == '__main__':
 	globa_count = []
-	# seed(5)
-	items_count = 10
-	or_stack_A = [i for i in range(items_count, 0, -1)]
+	seed(1)
+	# or_stack_A = [i for i in range(items_count, 0, -1)]
 	or_stack_A = [i for i in range(items_count)]
 	# or_stack_A = [1, 5, 2, 4, 3]
-	# shuffle(or_stack_A)
-	for k in range(1):
+	shuffle(or_stack_A)
+	for k in range(100):
 		stack_A = or_stack_A + []
 		# stack_A, _ = rotateA(stack_A, None)
 		# stack_A, _ = rotateA(stack_A, None)
 		# stack_A, _ = rotateA(stack_A, None)
 		or_stack_A = stack_A + []
-		# shuffle(or_stack_A)
+		shuffle(or_stack_A)
 		stack_B = []
 		move_count = 0
-		sel = []
+		lis = []
 		new_stackA = stack_A + []
 		ll = LIS(new_stackA)
-		if len(ll) > len(sel):
-			sel = ll
-		# sel = []
-		print(len(sel), sel)
-		while len(stack_A) > len(sel):
-			forward = []
-			forward_inv = []
-			backward = []
-			backward_inv = []
-			pairs = []
-			hands = []
-			slots = []
-			for i, n in enumerate(stack_A):
-				fc, bc = find_spot(stack_B, n, rev=True)
-				if n in sel:
-					slots.append({
-						'data': [9999, 9999, 9999, 9999]
-					})
-				else:
-					slots.append({
-						'data': [max([i, fc]), i + bc, max([len(stack_A) - i, bc]), i + fc]
-					})
-				slots[-1]['moves'] = [fc, bc, i, len(stack_A) - i]
-			for i, s in enumerate(slots):
-				slots[i]['min'] = min(s['data'])
-				slots[i]['opind'] = s['data'].index((min(s['data'])))
-			slots_sorted = sorted(slots, key= lambda x: x['min'])
+		if len(ll) > len(lis):
+			lis = ll
+		# lis = []
+		while len(stack_A) > len(lis):
 			
-			def rotate_and_check(stack_A, stack_B, range_count, funct, bypass=False):
-				global move_count, sel
-				bypass = False
-				break_it = False
-				for _ in range(range_count):
-					# 1/10 41
-					# 1/20 45
-					# 1/25 47
-					# 1/30 56 57 49
-					# 1/40 51
-					if not bypass and len(stack_B) and (len(stack_B) >= items_count * (1 - 1/30)):
-						new_stackA = stack_A + []
-						new_stackA, _ = pushB(new_stackA, [stack_B[0]])
-						ll = LIS(new_stackA)
-						if len(ll) > len(sel):
-							sel = ll
-							stack_A, stack_B = pushB(stack_A, stack_B)
-							move_count += 1
-							break_it = True
-							break
-					stack_A, stack_B = funct(stack_A, stack_B)
-					move_count += 1
-				return break_it, stack_A, stack_B
-			
-			slot = slots_sorted[0]
-			opt_ind = slots_sorted[0]['opind']
-			# print(slot)
-			# print(stack_A)
-			# print(stack_B)
-			if opt_ind == 0:
-				moves_A = slot['moves'][2]
-				moves_B = slot['moves'][0]
-				if moves_A > moves_B:
-					break_it, stack_A, stack_B = rotate_and_check(stack_A, stack_B, moves_B, rr, bypass=True)
-					if break_it:
-						continue
-					break_it, stack_A, stack_B = rotate_and_check(stack_A, stack_B, moves_A - moves_B, rotateA, bypass=True)
-					if break_it:
-						continue
-				else:
-					break_it, stack_A, stack_B = rotate_and_check(stack_A, stack_B, moves_A, rr, bypass=False)
-					if break_it:
-						continue
-					break_it, stack_A, stack_B = rotate_and_check(stack_A, stack_B, moves_B - moves_A, rotateB, bypass=False)
-					if break_it:
-						continue
-			elif opt_ind == 1:
-				moves_A = slot['moves'][2]
-				moves_B = slot['moves'][1]
-				break_it, stack_A, stack_B = rotate_and_check(stack_A, stack_B, moves_A, rotateA, bypass=False)
-				if break_it:
-					continue
-				break_it, stack_A, stack_B = rotate_and_check(stack_A, stack_B, moves_B, inv_rotateB, bypass=False)
-				if break_it:
-					continue
-			elif opt_ind == 3:
-				moves_A = slot['moves'][3]
-				moves_B = slot['moves'][0]
-				break_it, stack_A, stack_B = rotate_and_check(stack_A, stack_B, moves_A, inv_rotateA, bypass=True)
-				if break_it:
-					continue
-				break_it, stack_A, stack_B = rotate_and_check(stack_A, stack_B, moves_B, rotateB, bypass=True)
-				if break_it:
-					continue
-			else:
-				moves_A = slot['moves'][3]
-				moves_B = slot['moves'][1]
-				if moves_A > moves_B:
-					break_it, stack_A, stack_B = rotate_and_check(stack_A, stack_B, moves_B, rrr, bypass=False)
-					if break_it:
-						continue
-					break_it, stack_A, stack_B = rotate_and_check(stack_A, stack_B, moves_A - moves_B, inv_rotateA, bypass=False)
-					if break_it:
-						continue
-				else:
-					break_it, stack_A, stack_B = rotate_and_check(stack_A, stack_B, moves_A, rrr, bypass=True)
-					if break_it:
-						continue
-					break_it, stack_A, stack_B = rotate_and_check(stack_A, stack_B, moves_B - moves_A, inv_rotateB, bypass=True)
-					if break_it:
-						continue
-			# input([moves_A, moves_B, opt_ind])
-			stack_A, stack_B = pushA(stack_A, stack_B)
-			move_count += 1
-		# print("A", stack_A)
-		# print("B", stack_B)
+			tree_width = 1
+			slots_sorted = get_slots(stack_A, stack_B, lis)
+			# stack_A, stack_B, lis, moves = no_res
+			check_list = []
+			for d in range(min(tree_width, len(stack_A))):
+				no_res = next_op(slots_sorted[d], stack_A + [], stack_B + [], lis + [], move_count)
+				check_list.append(no_res)
+				# slots_sorted_in = get_slots(no_res[0], no_res[1], no_res[2])
+				# for w in range(min(tree_width, len(no_res[0]))):
+				# 	no_res_res = next_op(slots_sorted_in[w], no_res[0] + [], no_res[1] + [], no_res[2] + [], no_res[3])
+				# 	slots_sorted_in_in = get_slots(no_res_res[0], no_res_res[1], no_res_res[2])
+				# 	for g in range(min(tree_width, len(no_res_res[0]))):
+				# 		no_res_res_res = next_op(slots_sorted_in_in[g], no_res_res[0] + [], no_res_res[1] + [], no_res_res[2] + [], no_res_res[3])
+				# 		check_list.append(no_res_res_res)
+				
+			sorted_check = sorted(check_list, key=lambda branch: branch[3])
+			sel_check = sorted_check[0]
+			stack_A, stack_B, lis, mta = sel_check
+			move_count = mta
+			# print(mta)
 		while len(stack_B):
-			# break
 			fc, bc = find_spot(stack_A, stack_B[0], rev=False)
 			# print(stack_A)
 			# print(stack_B)
@@ -287,8 +376,8 @@ if __name__ == '__main__':
 		move_count += int(items_count/2 - abs(stack_A[0] - items_count/2))
 		print(k, move_count)
 		globa_count.append(move_count)
-		# print("aA", stack_A)
-		# print("aB", stack_B)
+		print("aA", stack_A)
+		print("aB", stack_B)
 	print("Avg", round(sum(globa_count) / len(globa_count)))
 	gcs = sorted(globa_count)
 	print("Med", gcs[floor(len(gcs)/2)])
