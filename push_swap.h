@@ -56,4 +56,6 @@ t_moves	*predict_moves(t_stack *stk_a, t_stack *stk_b, t_stack *lis);
 int	min_in_arr(t_stack stack);
 int	max_in_arr(t_stack stack);
 
+void	check_stack(t_stack *stack, char *dir);
+
 # endif

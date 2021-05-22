@@ -46,7 +46,7 @@ int	check_in_lis(int value, t_stack *lis)
 	while (i < lis->len)
 	{
 
-		printf("cil %d %d %d\n", value, lis->data[i], lis->len);
+	//	printf("cil %d %d %d\n", value, lis->data[i], lis->len);
 		if (value == lis->data[i])
 			return (1);
 		i++;
@@ -102,12 +102,32 @@ int	find_spot(t_stack *stk_b, int value)
 	return (i + 1);
 }
 
-//void init_moves()
-//{
-//	t_moves	*curr;
-//
-//	curr = malloc(sizeof(t_moves));
-//}
+void	check_stack(t_stack *stack, char *dir)
+{
+	if (ft_strcmp(dir, "cre"))
+	{
+		for (int i = 0; i < stack->len; i++)
+		{
+			if (stack->data[i] > stack->data[i + 1])
+			{
+				printf("Hai cannato scemo\n");
+				return ;
+			}
+		}
+	}
+	else if (ft_strcmp(dir, "dec"))
+	{
+		for (int i = 0; i < stack->len; i++)
+		{
+			if (stack->data[i] < stack->data[i + 1])
+			{
+				printf("Hai cannato scemo\n");
+				return ;
+			}
+		}
+	}
+	printf("Ti e' andata bene\n");
+}
 
 t_moves	*count_moves(int index_a, int index_b, int len_a,  int len_b)
 {
@@ -167,7 +187,7 @@ t_moves	*predict_moves(t_stack *stk_a, t_stack *stk_b, t_stack *lis)
 	best->abs_moves = 9999;
 	while (i < stk_a->len)
 	{
-		printf("protect? %d %d %d\n", stk_a->data[i], i, check_in_lis(stk_a->data[i], lis));
+		//printf("protect? %d %d %d\n", stk_a->data[i], i, check_in_lis(stk_a->data[i], lis));
 		if (check_in_lis(stk_a->data[i], lis))
 		{
 			i++;

@@ -386,6 +386,7 @@ int main(int argc, char **argv)
 	free(arrB->data);
 	free(arrB);
 	//free(to_do);
+	check_stack(arrA, "cre");
 	printf("mosse : %d\n", count);
 	return 1;
 }
