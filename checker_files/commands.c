@@ -38,7 +38,7 @@ void swap_first_two_elements(t_list **stack)  //lo uso sia per il comando "sa" c
 	int first;
 	int second;
 	
-	if((*stack)->next)
+	if(*stack && (*stack)->next)
 	{
 		first = (*stack)->nb;
 		second = (*stack)->next->nb;

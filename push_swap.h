@@ -6,7 +6,7 @@
 /*   By: vbuonvin <vbuonvin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/04 13:54:48 by vbuonvin          #+#    #+#             */
-/*   Updated: 2021/05/21 17:41:03 by rboldini         ###   ########.fr       */
+/*   Updated: 2021/05/23 16:13:34 by vbuonvin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,7 @@ int	min_in_arr(t_stack stack);
 int	max_in_arr(t_stack stack);
 
 void	check_stack(t_stack *stack, char *dir);
+void	print_moves(t_moves *to_do);
+void	loop_print(char *cmd, int nb);
 
 # endif

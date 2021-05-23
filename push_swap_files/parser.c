@@ -58,13 +58,12 @@ int check_double_int(int *stack_a, int size)
 	return(0);
 }
 
-int check_single_arg(int *stack_a, int ac, char **av)
+int check_single_arg(int *stack_a, char **av)
 	{
 	int i;
 	int k;
 	char **tmp;
 
-	tmp = ft_calloc(sizeof(char *), (ac - 1));
 	tmp = ft_split(av[1], ' ');
 	i = 1;
 	k = 0;
@@ -99,8 +98,8 @@ t_stack *parser(int ac, char **av)
 	{
 		if(ac == 2)
 		{
-			stack_a->data = ft_calloc(sizeof(int), ac - 1);
-			stack_a->len = check_single_arg(stack_a->data, ac, av);
+			//stack_a->data = ft_calloc(sizeof(int), ac - 1);
+			stack_a->len = check_single_arg(stack_a->data, av);
 		}
 		else
 			exit(0);

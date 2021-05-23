@@ -104,9 +104,9 @@ int	find_spot(t_stack *stk_b, int value)
 
 void	check_stack(t_stack *stack, char *dir)
 {
-	if (ft_strcmp(dir, "cre"))
+	if (!ft_strcmp(dir, "cre"))
 	{
-		for (int i = 0; i < stack->len; i++)
+		for (int i = 0; i < stack->len - 1; i++)
 		{
 			if (stack->data[i] > stack->data[i + 1])
 			{
@@ -115,9 +115,9 @@ void	check_stack(t_stack *stack, char *dir)
 			}
 		}
 	}
-	else if (ft_strcmp(dir, "dec"))
+	else if (!ft_strcmp(dir, "dec"))
 	{
-		for (int i = 0; i < stack->len; i++)
+		for (int i = 0; i < stack->len - 1; i++)
 		{
 			if (stack->data[i] < stack->data[i + 1])
 			{
@@ -187,6 +187,7 @@ t_moves	*predict_moves(t_stack *stk_a, t_stack *stk_b, t_stack *lis)
 	best->abs_moves = 9999;
 	while (i < stk_a->len)
 	{
+		
 		//printf("protect? %d %d %d\n", stk_a->data[i], i, check_in_lis(stk_a->data[i], lis));
 		if (check_in_lis(stk_a->data[i], lis))
 		{
@@ -203,4 +204,13 @@ t_moves	*predict_moves(t_stack *stk_a, t_stack *stk_b, t_stack *lis)
 		i++;
 	}
 	return (best);
+}
+
+void loop_print(char *cmd, int nb)
+{
+	while (nb--)
+	{
+		write(1, cmd, ft_strlen(cmd));
+		write(1, "\n", 1);
+	}
 }

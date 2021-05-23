@@ -58,15 +58,19 @@ int check_double_int(int *stack_a, int size)
 	return(0);
 }
 
-void check_single_arg(int *stack_a, int ac, char **av)
+int *check_single_arg(char **av, int *len)
 {
 	int i;
 	int k;
 	char **tmp;
+	int *stack_a;
 
-	tmp = ft_calloc(sizeof(char *), (ac - 1));
 	tmp = ft_split(av[1], ' ');
 	i = 1;
+	k = 0;
+	while(tmp[k])
+		k++;
+	stack_a = malloc(sizeof(int) * k);
 	k = 0;
 	while(tmp[k])
 	{
@@ -81,23 +85,27 @@ void check_single_arg(int *stack_a, int ac, char **av)
 			ft_error(stack_a);
 		}
 	}
+	*len = k;
 	free_matrix(tmp);
-	if(check_double_int(stack_a, ac - 1))
+	if(check_double_int(stack_a, k))
 	    ft_error(stack_a);
+	return(stack_a);
 }
 
 int main(int ac, char**av)
-	{
-	int *stack_a;
+{
 	int i;
 	int k;
+	int *stack_a;
+	int len;
 
+	len = 0;
 	if(ac <= 2)
 	{
 		if(ac == 2)
 		{
-			stack_a = (int *)malloc(sizeof(int) * ac - 1);
-			check_single_arg(stack_a, ac, av);
+			//stack_a = (int *)malloc(sizeof(int) * 500);
+			stack_a = check_single_arg(av, &len);
 		}
 		else
 			exit(0);
@@ -107,6 +115,7 @@ int main(int ac, char**av)
 		stack_a = (int *)malloc(sizeof(int) * (ac - 1));
 		i = 1;
 		k = 0;
+		len = ac - 1;
 		while(i < ac)
 		{
 			if(check_integer(av[i]))
@@ -122,7 +131,7 @@ int main(int ac, char**av)
 			ft_error(stack_a);
 	}
 	//printf("OK\n");
-	start_checker(stack_a, ac - 1);
+	start_checker(stack_a, len);
 	free(stack_a);
 	stack_a = NULL;
 	return(0);

@@ -6,7 +6,7 @@
 /*   By: vbuonvin <vbuonvin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 18:58:34 by vbuonvin          #+#    #+#             */
-/*   Updated: 2021/05/20 14:35:29 by vbuonvin         ###   ########.fr       */
+/*   Updated: 2021/05/23 18:18:06 by vbuonvin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,6 @@ void activate_command_2(char *cmd, t_list **stack_a, t_list **stack_b)
 		rotate_stack(stack_a);
 		rotate_stack(stack_b);
 	}
-	if(!ft_strcmp(cmd, "rrr"))
-	{
-		reverse_rotate(stack_a);
-		reverse_rotate(stack_b);
-	}
 }
 
 void activate_command_1(char *cmd, t_list **stack_a, t_list **stack_b)
@@ -71,6 +66,11 @@ void activate_command_1(char *cmd, t_list **stack_a, t_list **stack_b)
 		reverse_rotate(stack_a);
 	if(!ft_strcmp(cmd, "rrb"))
 		reverse_rotate(stack_b);
+	if(!ft_strcmp(cmd, "rrr"))
+	{
+		reverse_rotate(stack_a);
+		reverse_rotate(stack_b);
+	}
 }
 
 void give_result(t_list *stack_a, t_list *stack_b)
@@ -115,7 +115,7 @@ void receive_commands(t_list **stack_a,t_list **stack_b)
 			!ft_strcmp(*cmd, "rrr"))
 			activate_command_1(*cmd, stack_a, stack_b);
 		else
-			write(1, "Command does not exist\n", ft_strlen("Command does not exist\n"));
-		print_stack(*stack_a, *stack_b);
+			write(1, "Command does not exist\n", 23);
+		//print_stack(*stack_a, *stack_b);
 	}
 }

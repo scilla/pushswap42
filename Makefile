@@ -7,6 +7,7 @@ CFLAGS	= -Wall -Wextra -Werror
 PUSH_SRCS =	parser.c				\
 			utils.c				\
 			main.c				\
+			moves_printer.c
 
 PUSH_DIR = 	./push_swap_files
 
