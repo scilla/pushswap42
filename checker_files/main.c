@@ -19,6 +19,5 @@ int	main(int ac, char**av)
 	}
 	start_checker(stack_a, len);
 	free(stack_a);
-	stack_a = NULL;
 	return (0);
 }

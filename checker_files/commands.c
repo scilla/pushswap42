@@ -15,7 +15,7 @@ void	swap_first_two_elements(t_list **stack)
 	}
 }
 
-void	push_on_a(t_list **stack_a, t_list **stack_b)
+void	push_stack(t_list **stack_a, t_list **stack_b)
 {
 	t_list	*tmp;
 
@@ -26,22 +26,6 @@ void	push_on_a(t_list **stack_a, t_list **stack_b)
 		*stack_b = tmp;
 		if (tmp)
 			(*stack_b)->previous = NULL;
-		adjust_index(stack_a);
-		adjust_index(stack_b);
-	}
-}
-
-void	push_on_b(t_list **stack_a, t_list **stack_b)
-{
-	t_list	*tmp;
-
-	if (*stack_a)
-	{
-		tmp = (*stack_a)->next;
-		ft_lstadd_front(stack_b, *stack_a);
-		*stack_a = tmp;
-		if (tmp)
-			(*stack_a)->previous = NULL;
 		adjust_index(stack_a);
 		adjust_index(stack_b);
 	}

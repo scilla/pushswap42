@@ -6,7 +6,7 @@
 /*   By: scilla <scilla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/24 13:48:27 by vbuonvin          #+#    #+#             */
-/*   Updated: 2021/05/24 16:27:57 by scilla           ###   ########.fr       */
+/*   Updated: 2021/05/24 17:38:46 by scilla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ void	activate_command_2(char *cmd, t_list **stack_a, t_list **stack_b)
 		swap_first_two_elements(stack_b);
 	}
 	if (!ft_strcmp(cmd, "pa"))
-		push_on_a(stack_a, stack_b);
+		push_stack(stack_a, stack_b);
 	if (!ft_strcmp(cmd, "pb"))
-		push_on_b(stack_a, stack_b);
+		push_stack(stack_b, stack_a);
 	if (!ft_strcmp(cmd, "rr"))
 	{
 		rotate_stack(stack_a);

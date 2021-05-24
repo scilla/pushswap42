@@ -22,5 +22,4 @@ void	start_checker(int *stack_a, int size)
 		free_stack(&real_a);
 	if (real_b)
 		free_stack(&real_b);
-	//free(tmp_a);
 }
