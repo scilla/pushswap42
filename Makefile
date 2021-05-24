@@ -4,17 +4,19 @@ NAME_CHECKER = checker
 CC 		= gcc
 CFLAGS	= -Wall -Wextra -Werror
 
-PUSH_SRCS =	parser.c				\
-			utils.c				\
-			utils2.c			\
-			main.c				\
-			moves_printer.c		\
-			moves.c				\
-			moves2.c			\
-			debug.c				\
-			lis.c				\
+PUSH_SRCS =	push_swap_utils.c					\
+			make_opt_code.c						\
+			parser.c							\
+			utils.c								\
+			utils2.c							\
+			main.c								\
+			moves_printer.c						\
+			moves.c								\
+			moves2.c							\
+			debug.c								\
+			lis.c								\
 			../checker_files/checker_utils.c	\
-			../checker_files/checker_main.c		\
+			../checker_files/checker_main.c
 
 PUSH_DIR = 	./push_swap_files
 

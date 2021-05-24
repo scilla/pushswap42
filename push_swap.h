@@ -41,6 +41,14 @@ typedef struct s_index
 	int			len_b;
 }				t_index;
 
+typedef struct t_data
+{
+	t_stack		*dup;
+	t_stack		*lis;
+	t_stack		*dup_lis;
+	int			spot;
+}				t_data;
+
 /*
 **	CHECKER
 */
@@ -72,6 +80,7 @@ t_stack	*stack_dup(int *data, int len);
 
 void	ft_lis(t_stack *stk_s, t_stack **stk_d);
 void	print_stack(t_stack *src);
+void	free_t_stack(t_stack *stack);
 
 /*
 **	moves.c
@@ -95,10 +104,13 @@ t_moves	*predict_moves(t_stack *stk_a, t_stack *stk_b, t_stack *lis);
 int		min_in_arr(t_stack stack);
 int		max_in_arr(t_stack stack);
 int		check_in_lis(int value, t_stack *lis);
-
+void	make_opt_code0(t_moves *to_do, t_stack *stk_a, t_stack *stk_b);
+void	make_opt_code3(t_moves *to_do, t_stack *stk_a, t_stack *stk_b);
 void	check_stack(t_stack *stack, char *dir);
 void	print_moves(t_moves *to_do);
 void	loop_print(char *cmd, int nb);
+void	loop_move(int n, void (*f)(t_stack *, t_stack *),
+				  t_stack *s_a, t_stack *s_b);
 
 /*
 ** parser.c
