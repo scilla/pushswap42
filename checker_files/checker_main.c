@@ -53,8 +53,11 @@ int	*check_single_arg(char **av, int *len)
 	k = 0;
 	while (tmp[k])
 	{
-		if (check_integer(tmp[k++]))
+		if (check_integer(tmp[k]))
+		{
 			stack_a[k] = ft_atoi(tmp[k]);
+			k++;
+		}
 		else
 		{
 			free_matrix(tmp);
