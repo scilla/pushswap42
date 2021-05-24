@@ -41,7 +41,7 @@ typedef struct s_index
 	int			len_b;
 }				t_index;
 
-typedef struct t_data
+typedef struct s_data
 {
 	t_stack		*dup;
 	t_stack		*lis;
@@ -109,8 +109,9 @@ void	make_opt_code3(t_moves *to_do, t_stack *stk_a, t_stack *stk_b);
 void	check_stack(t_stack *stack, char *dir);
 void	print_moves(t_moves *to_do);
 void	loop_print(char *cmd, int nb);
+void	final_rotate(t_data *var, t_stack *stack_a);
 void	loop_move(int n, void (*f)(t_stack *, t_stack *),
-				  t_stack *s_a, t_stack *s_b);
+			t_stack *s_a, t_stack *s_b);
 
 /*
 ** parser.c

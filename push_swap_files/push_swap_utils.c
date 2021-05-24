@@ -1,5 +1,19 @@
 #include "../push_swap.h"
 
+void	final_rotate(t_data *var, t_stack *stack_a)
+{
+	if (var->spot < stack_a->len / 2.0)
+	{
+		loop_move(var->spot, &rotate, stack_a, stack_a);
+		print_moves(&(t_moves){var->spot, 0, 0, 1});
+	}
+	else
+	{
+		loop_move(stack_a->len - var->spot, &inv_rotate, stack_a, stack_a);
+		print_moves(&(t_moves){stack_a->len - var->spot, 0, 0, 2});
+	}
+}
+
 int	min_stack(t_stack *stack)
 {
 	int	i;

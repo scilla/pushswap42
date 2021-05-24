@@ -30,19 +30,8 @@ void	init_stack(t_stack **stack)
 	(*stack)->len = 0;
 }
 
-int	main(int argc, char **argv)
+void	stka(t_data *var, t_stack *stack_a, t_stack *stack_b, t_moves **to_do)
 {
-	t_stack	*stack_a;
-	t_stack	*stack_b;
-	t_moves	*to_do;
-	t_data	*var;
-
-	var = malloc(sizeof(t_data));
-	stack_a = parser(argc, argv);
-	init_stack(&stack_b);
-	init_stack(&var->lis);
-	ft_lis(stack_a, &((*var).lis));
-	init_stack(&var->dup_lis);
 	while (stack_a->len > var->lis->len)
 	{
 		var->dup = stack_dup(stack_a->data, stack_a->len);
@@ -56,13 +45,17 @@ int	main(int argc, char **argv)
 			write(1, "sa\n", 3);
 			continue ;
 		}
-		to_do = predict_moves(stack_a, stack_b, var->lis);
-		make_moves(to_do, stack_a, stack_b);
-		print_moves(to_do);
-		free(to_do);
+		*to_do = predict_moves(stack_a, stack_b, var->lis);
+		make_moves(*to_do, stack_a, stack_b);
+		print_moves(*to_do);
+		free(*to_do);
 		push(stack_a, stack_b);
 		write(1, "pb\n", 3);
 	}
+}
+
+void	stkb(t_data *var, t_stack *stack_a, t_stack *stack_b)
+{
 	while (stack_b->len)
 	{
 		var->spot = find_inv_spot(stack_a, stack_b->data[0]);
@@ -79,17 +72,25 @@ int	main(int argc, char **argv)
 		push(stack_b, stack_a);
 		write(1, "pa\n", 3);
 	}
+}
+
+int	main(int argc, char **argv)
+{
+	t_stack	*stack_a;
+	t_stack	*stack_b;
+	t_moves	*to_do;
+	t_data	*var;
+
+	var = malloc(sizeof(t_data));
+	stack_a = parser(argc, argv);
+	init_stack(&stack_b);
+	init_stack(&var->lis);
+	ft_lis(stack_a, &((*var).lis));
+	init_stack(&var->dup_lis);
+	stka(var, stack_a, stack_b, &to_do);
+	stkb(var, stack_a, stack_b);
 	var->spot = min_in_arr(*stack_a);
-	if (var->spot < stack_a->len / 2.0)
-	{
-		loop_move(var->spot, &rotate, stack_a, stack_a);
-		print_moves(&(t_moves){var->spot, 0, 0, 1});
-	}
-	else
-	{
-		loop_move(stack_a->len - var->spot, &inv_rotate, stack_a, stack_a);
-		print_moves(&(t_moves){stack_a->len - var->spot, 0, 0, 2});
-	}
+	final_rotate(var, stack_a);
 	free_t_stack(stack_b);
 	free_t_stack(var->dup_lis);
 	free_t_stack(stack_a);
