@@ -6,7 +6,7 @@
 /*   By: scilla <scilla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/24 13:48:27 by vbuonvin          #+#    #+#             */
-/*   Updated: 2021/05/24 16:23:15 by scilla           ###   ########.fr       */
+/*   Updated: 2021/05/24 16:27:57 by scilla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,7 @@ void	activate_command_1(char *cmd, t_list **stack_a, t_list **stack_b)
 void	give_result(t_list *stack_a, t_list *stack_b)
 {
 	t_list	*tmp_b;
-	int		i;
 
-	i = 1;
 	tmp_b = stack_b;
 	if (stack_a && !tmp_b)
 	{
@@ -94,6 +92,8 @@ void	receive_commands(t_list **stack_a, t_list **stack_b)
 			activate_command_1(*cmd, stack_a, stack_b);
 		else
 			write(1, "Command does not exist\n", 23);
+		free(*cmd);
 	}
-	free_matrix(cmd);
+	free(*cmd);
+	free(cmd);
 }
