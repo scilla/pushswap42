@@ -16,7 +16,7 @@ void	start_checker(int *stack_a, int size)
 		ft_lstadd_back(&real_a, tmp_a);
 		i++;
 	}
-	free_stack(&tmp_a);
+	//free_stack(&tmp_a);
 	receive_commands(&real_a, &real_b);
 	give_result(real_a, real_b);
 	if (real_a)
