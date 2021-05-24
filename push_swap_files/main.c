@@ -20,16 +20,20 @@ int	max_stack(t_stack **stack, int len)
 {
 	int res;
 	int	i;
+	int	max_ind;
 
 	res = stack[0]->len;
 	i = 0;
 	while (i < len)
 	{
 		if (stack[i]->len > res)
+		{
 			res = stack[i]->len;
+			max_ind = i;
+		}
 		i++;
 	}
-	return (res);
+	return (max_ind);
 }
 
 t_stack	*stack_dup(int *data, int len)

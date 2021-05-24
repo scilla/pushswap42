@@ -64,7 +64,6 @@ void	ft_lis(t_stack *stk_s, t_stack **stk_d)
 	t_stack	*dup;
 	t_stack	**reg;
 	int		i;
-	int		j;
 
 	dup = stack_dup(stk_s->data, stk_s->len);
 	while (min_stack(dup) != dup->data[0])
@@ -75,11 +74,8 @@ void	ft_lis(t_stack *stk_s, t_stack **stk_d)
 	reg[0]->len++;
 	compare_lis(reg, dup, stk_s->len);
 	i = max_stack(reg, dup->len);
-	j = 0;
-	while (i != reg[j]->len)
-		j++;
 	free_t_stack(*stk_d);
-	*stk_d = stack_dup(reg[j]->data, reg[j]->len);
+	*stk_d = stack_dup(reg[i]->data, reg[i]->len);
 	free_register(reg, stk_s->len);
 	free(reg);
 	free_t_stack(dup);
