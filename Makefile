@@ -10,6 +10,7 @@ PUSH_SRCS =	parser.c				\
 			main.c				\
 			moves_printer.c		\
 			moves.c				\
+			moves2.c			\
 			debug.c				\
 			lis.c				\
 			../checker_files/checker_utils.c	\
