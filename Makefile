@@ -7,11 +7,13 @@ CFLAGS	= -Wall -Wextra -Werror
 PUSH_SRCS =	parser.c				\
 			utils.c				\
 			main.c				\
-			moves_printer.c
+			moves_printer.c		\
+			../checker_files/checker_utils.c	\
+			../checker_files/checker_main.c		\
 
 PUSH_DIR = 	./push_swap_files
 
-CHECKER_SRCS =	main.c				\
+CHECKER_SRCS =	checker_main.c				\
 				get_commands.c		\
 				checker.c			\
 				commands.c			\

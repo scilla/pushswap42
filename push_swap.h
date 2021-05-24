@@ -6,7 +6,7 @@
 /*   By: vbuonvin <vbuonvin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/04 13:54:48 by vbuonvin          #+#    #+#             */
-/*   Updated: 2021/05/24 14:03:20 by vbuonvin         ###   ########.fr       */
+/*   Updated: 2021/05/24 14:48:05 by vbuonvin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void	free_stack(t_list **stack);
 void	adjust_index(t_list **stack);
 void	free_matrix(char **matrix);
 void	ft_error(int *stack_a);
+int		*check_more_args(int ac, char **av, int *len);
 
 /*
 ** PUSH SWAP
@@ -62,5 +63,13 @@ int	max_in_arr(t_stack stack);
 void	check_stack(t_stack *stack, char *dir);
 void	print_moves(t_moves *to_do);
 void	loop_print(char *cmd, int nb);
+
+/*
+** parser.c
+*/
+int	*check_single_arg(char **av, int *len);
+int	check_double_int(int *stack_a, int size);
+int	check_integer(char *tmp);
+
 
 # endif

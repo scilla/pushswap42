@@ -1,128 +1,39 @@
 #include "../push_swap.h"
 
-void free_matrix(char **matrix)
+void	parse_multi_args(int ac, char **av, t_stack *stack_a)
 {
-	int i;
+	int	i;
 
-	i = 0;
-	while(matrix[i])
-		free(matrix[i++]);
-	free(matrix);
-	matrix = NULL;
-}
-
-void ft_error(int *stack_a)
-{
-	write(1, "Error\n", 6);
-	free(stack_a);
-	stack_a = NULL;
-	exit(0);
-}
-
-int check_integer(char *tmp)
-{
-	int i;
-
-	i = 0;
-	while(tmp[i])
-	{
-		if(tmp[i] == '-' || tmp[i] == '+')
-			i++;
-		if(!ft_isdigit(tmp[i]))
-			return(0);
-		i++;
-	}
-	return(1);
-}
-
-int check_double_int(int *stack_a, int size)
-{
-	int i;
-	int j;
-
-	i = 0;
-	while(i < size)
-	{
-		j = 0;
-		while(j < size)
-		{
-			if(stack_a[j] == stack_a[i])
-			{
-				if(i != j)
-					return(1);
-			}
-			j++;
-		}
-		i++;
-	}
-	return(0);
-}
-
-int check_single_arg(int *stack_a, char **av)
-	{
-	int i;
-	int k;
-	char **tmp;
-
-	tmp = ft_split(av[1], ' ');
+	stack_a->data = (int *)malloc(sizeof(int) * (ac - 1));
 	i = 1;
-	k = 0;
-	while(tmp[k])
+	stack_a->len = ac - 1;
+	while (i < ac)
 	{
-		if(check_integer(tmp[k]))
+		if (check_integer(av[i]))
 		{
-			stack_a[k] = ft_atoi(tmp[k]);
-			k++;
+			stack_a->data[i - 1] = ft_atoi(av[i]);
+			i++;
 		}
 		else
-		{
-			free_matrix(tmp);
-			ft_error(stack_a);
-		}
+			ft_error(stack_a->data);
 	}
-	free_matrix(tmp);
-	if(check_double_int(stack_a, k))
-		ft_error(stack_a);
-	return (k);
+	if (check_double_int(stack_a->data, stack_a->len))
+		ft_error(stack_a->data);
 }
 
-
-t_stack *parser(int ac, char **av)
+t_stack	*parser(int ac, char **av)
 {
-	t_stack *stack_a;
-	int i;
-	int k;
+	t_stack	*stack_a;
 
 	stack_a = malloc(sizeof(t_stack));
-	if(ac <= 2)
+	if (ac <= 2)
 	{
-		if(ac == 2)
-		{
-			//stack_a->data = ft_calloc(sizeof(int), ac - 1);
-			stack_a->len = check_single_arg(stack_a->data, av);
-		}
+		if (ac == 2)
+			stack_a->data = check_single_arg(av, &stack_a->len);
 		else
 			exit(0);
 	}
 	else
-	{
-		stack_a->data = (int *)malloc(sizeof(int) * (ac - 1));
-		i = 1;
-		k = 0;
-		stack_a->len = ac - 1;
-		while(i < ac)
-		{
-			if(check_integer(av[i]))
-			{
-				stack_a->data[k] = ft_atoi(av[i]);
-				i++;
-				k++;
-			}
-			else
-				ft_error(stack_a->data);
-		}
-		if(check_double_int(stack_a->data, stack_a->len))
-			ft_error(stack_a->data);
-	}
+		parse_multi_args(ac, av, stack_a);
 	return (stack_a);
 }
