@@ -6,7 +6,7 @@
 /*   By: scilla <scilla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/04 13:54:48 by vbuonvin          #+#    #+#             */
-/*   Updated: 2021/05/24 17:50:09 by scilla           ###   ########.fr       */
+/*   Updated: 2021/05/24 18:38:10 by rboldini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,14 @@ typedef struct	s_moves
 	int	abs_moves;
 	int opt_code;
 }				t_moves;
+
+typedef struct	s_index
+{
+	int			index_a;
+	int			index_b;
+	int			len_a;
+	int			len_b;
+}				t_index;
 
 /*
 **	CHECKER
@@ -85,6 +93,7 @@ int		find_inv_spot(t_stack *stk_b, int value);
 t_moves	*predict_moves(t_stack *stk_a, t_stack *stk_b, t_stack *lis);
 int	min_in_arr(t_stack stack);
 int	max_in_arr(t_stack stack);
+int	check_in_lis(int value, t_stack *lis);
 
 void	check_stack(t_stack *stack, char *dir);
 void	print_moves(t_moves *to_do);

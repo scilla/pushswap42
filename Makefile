@@ -6,6 +6,7 @@ CFLAGS	= -Wall -Wextra -Werror
 
 PUSH_SRCS =	parser.c				\
 			utils.c				\
+			utils2.c			\
 			main.c				\
 			moves_printer.c		\
 			moves.c				\

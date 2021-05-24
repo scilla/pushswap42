@@ -55,7 +55,7 @@ void	reverse_rotate(t_list **stack)
 	t_list	*tmp_second;
 	t_list	*tmp_new_first;
 
-	if (*stack)
+	if (*stack && (*stack)->next)
 	{
 		tmp_second = *stack;
 		tmp_new_first = *stack;
