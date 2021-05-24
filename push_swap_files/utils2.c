@@ -2,8 +2,8 @@
 
 int	min_in_arr(t_stack stack)
 {
-	int min;
-	int i;
+	int	min;
+	int	i;
 
 	min = stack.data[0];
 	i = 0;
@@ -20,8 +20,8 @@ int	min_in_arr(t_stack stack)
 
 int	max_in_arr(t_stack stack)
 {
-	int max;
-	int i;
+	int	max;
+	int	i;
 
 	max = stack.data[0];
 	i = 0;
@@ -43,8 +43,6 @@ int	check_in_lis(int value, t_stack *lis)
 	i = 0;
 	while (i < lis->len)
 	{
-
-		//	printf("cil %d %d %d\n", value, lis->data[i], lis->len);
 		if (value == lis->data[i])
 			return (1);
 		i++;
@@ -70,7 +68,7 @@ int	find_inv_spot(t_stack *stk_b, int value)
 	while (i < stk_b->len - 1)
 	{
 		if (stk_b->data[i] < value && value < stk_b->data[i + 1])
-			break;
+			break ;
 		i++;
 	}
 	return (i + 1);
@@ -94,7 +92,7 @@ int	find_spot(t_stack *stk_b, int value)
 	while (i < stk_b->len - 1)
 	{
 		if (stk_b->data[i] > value && value > stk_b->data[i + 1])
-			break;
+			break ;
 		i++;
 	}
 	return (i + 1);
