@@ -39,24 +39,31 @@ int	check_double_int(int *stack_a, int size)
 	return (0);
 }
 
+int	find_len(char **tmp)
+{
+	int	i;
+
+	i = 0;
+	while (tmp[i])
+		i++;
+	return (i);
+}
+
 int	*check_single_arg(char **av, int *len)
 {
-	int		k;
 	char	**tmp;
 	int		*stack_a;
 
 	tmp = ft_split(av[1], ' ');
-	k = 0;
-	while (tmp[k])
-		k++;
-	stack_a = malloc(sizeof(int) * k);
-	k = 0;
-	while (tmp[k])
+	*len = find_len(tmp);
+	stack_a = malloc(sizeof(int) * (*len));
+	*len = 0;
+	while (tmp[*len])
 	{
-		if (check_integer(tmp[k]))
+		if (check_integer(tmp[*len]))
 		{
-			stack_a[k] = ft_atoi(tmp[k]);
-			k++;
+			stack_a[*len] = ft_atoi(tmp[*len]);
+			(*len)++;
 		}
 		else
 		{
@@ -64,9 +71,8 @@ int	*check_single_arg(char **av, int *len)
 			ft_error(stack_a);
 		}
 	}
-	*len = k;
 	free_matrix(tmp);
-	if (check_double_int(stack_a, k))
+	if (check_double_int(stack_a, *len))
 		ft_error(stack_a);
 	return (stack_a);
 }

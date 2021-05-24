@@ -2,8 +2,8 @@
 
 void	free_stack(t_list **stack)
 {
-	t_list *curr;
-	t_list *tmp;
+	t_list	*curr;
+	t_list	*tmp;
 
 	curr = *stack;
 	while (curr)
