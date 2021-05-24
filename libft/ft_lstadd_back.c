@@ -28,6 +28,4 @@ void	ft_lstadd_back(t_list **lst, t_list *new)
 		tmp = tmp->next;
 	new->previous = tmp;
 	tmp->next = new;
-	//free(new->next);
-	//new->next = NULL;
 }

@@ -12,52 +12,56 @@
 
 #include "libft.h"
 
-int		ft_strappend(char **s1, char *s2)
+int	ft_strappend(char **s1, char *s2)
 {
-	unsigned int	i;
-	unsigned int	n;
+	unsigned int	i_n[2];
 	char			*res;
 
-	i = 0;
-	while (*(*s1 + i))
-		i++;
-	n = i;
-	while (*(s2 + i - n))
-		i++;
-	if (!(res = malloc(sizeof(char) * (i + 1))))
+	i_n[0] = 0;
+	while (*(*s1 + i_n[0]))
+		i_n[0]++;
+	i_n[1] = i_n[0];
+	while (*(s2 + i_n[0] - i_n[1]))
+		i_n[0]++;
+	res = malloc(sizeof(char) * (i_n[0] + 1));
+	if (!res)
 		return (0);
-	n = 0;
-	i = 0;
-	while (*(*s1 + i))
+	i_n[1] = 0;
+	i_n[0] = 0;
+	while (*(*s1 + i_n[0]))
 	{
-		res[i] = *(*s1 + i);
-		i++;
+		res[i_n[0]] = *(*s1 + i_n[0]);
+		i_n[0]++;
 	}
-	while (*(s2 + n))
-		res[i++] = *(s2 + n++);
-	res[i] = 0;
+	while (*(s2 + i_n[1]))
+		res[i_n[0]++] = *(s2 + i_n[1]++);
+	res[i_n[0]] = 0;
 	free(*s1);
 	*s1 = res;
 	return (1);
 }
 
-int		shift_memory(char *str, int size, int offset)
+int	shift_memory(char *str, int size, int offset)
 {
 	ft_memmove(&str[0], &str[offset], size - offset);
 	ft_memset(&str[size - offset], 0, offset);
 	return (1);
 }
 
-int		flush_buffer(char *buf, char **line)
+int	free_line(char **line)
+{
+	free(line);
+	return (0);
+}
+
+int	flush_buffer(char *buf, char **line)
 {
 	int		n;
 	char	*tmp;
 
-	if (!(tmp = malloc(sizeof(char) * (BUFFER_SIZE + 1))))
-	{
-		free(line);
-		return (0);
-	}
+	tmp = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (!tmp)
+		return (free_line(line));
 	*tmp = 0;
 	n = 0;
 	while (n < BUFFER_SIZE && buf[n] != 0 && buf[n] != '\n')
@@ -77,14 +81,15 @@ int		flush_buffer(char *buf, char **line)
 	return (1);
 }
 
-int		get_next_line(int fd, char **line)
+int	get_next_line(int fd, char **line)
 {
 	static char	buf[BUFFER_SIZE];
 	int			res;
 
 	if ((fd < 0 || !line || BUFFER_SIZE <= 0 || fd > MAX_OPEN))
 		return (-1);
-	if (!(*line = malloc(sizeof(char))))
+	*line = malloc(sizeof(char));
+	if (!(*line))
 		return (-1);
 	**line = 0;
 	res = 1;
