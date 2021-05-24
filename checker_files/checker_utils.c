@@ -10,9 +10,8 @@ void	free_stack(t_list **stack)
 	{
 		tmp = curr->next;
 		free(curr);
-		curr = tmp->next;
+		curr = tmp;
 	}
-	
 }
 
 void	adjust_index(t_list **stack)
