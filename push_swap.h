@@ -50,6 +50,33 @@ void	ft_error(int *stack_a);
 int		*check_more_args(int ac, char **av, int *len);
 
 /*
+**	main.c
+*/
+
+int	min_stack(t_stack *stack);
+int	max_stack(t_stack **stack, int len);
+t_stack	*stack_dup(int *data, int len);
+
+/*
+**	lis.c
+*/
+
+void	ft_lis(t_stack *stk_s, t_stack **stk_d);
+void	print_stack(t_stack *src);
+
+/*
+**	moves.c
+*/
+
+void	swap(t_stack *stk, t_stack *fuffa);
+void	rotate(t_stack *stk,  t_stack *fuffa);
+void	inv_rotate(t_stack *stk, t_stack *fuffa);
+void	rr(t_stack *stk_a, t_stack * stk_b);
+void	rrr(t_stack *stk_a, t_stack * stk_b);
+void	push(t_stack *stk_s, t_stack *stk_d);
+
+
+/*
 ** PUSH SWAP
 */
 

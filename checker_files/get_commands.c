@@ -6,33 +6,11 @@
 /*   By: vbuonvin <vbuonvin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/24 13:48:27 by vbuonvin          #+#    #+#             */
-/*   Updated: 2021/05/24 13:53:30 by vbuonvin         ###   ########.fr       */
+/*   Updated: 2021/05/24 15:25:35 by rboldini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../push_swap.h"
-
-void	print_stack(t_list *stack_a, t_list *stack_b)
-{
-	if (stack_a)
-	{
-		printf("STACK A\n");
-		while (stack_a)
-		{
-			printf("INDEX: %d		NUMBER: %d\n", stack_a->index, stack_a->nb);
-			stack_a = stack_a->next;
-		}
-	}
-	if (stack_b)
-	{
-		printf("STACK B\n");
-		while (stack_b)
-		{
-			printf("INDEX: %d		NUMBER: %d\n", stack_b->index, stack_b->nb);
-			stack_b = stack_b->next;
-		}
-	}
-}
 
 void	activate_command_2(char *cmd, t_list **stack_a, t_list **stack_b)
 {

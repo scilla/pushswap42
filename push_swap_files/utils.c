@@ -102,33 +102,6 @@ int	find_spot(t_stack *stk_b, int value)
 	return (i + 1);
 }
 
-void	check_stack(t_stack *stack, char *dir)
-{
-	if (!ft_strcmp(dir, "cre"))
-	{
-		for (int i = 0; i < stack->len - 1; i++)
-		{
-			if (stack->data[i] > stack->data[i + 1])
-			{
-				printf("Hai cannato scemo\n");
-				return ;
-			}
-		}
-	}
-	else if (!ft_strcmp(dir, "dec"))
-	{
-		for (int i = 0; i < stack->len - 1; i++)
-		{
-			if (stack->data[i] < stack->data[i + 1])
-			{
-				printf("Hai cannato scemo\n");
-				return ;
-			}
-		}
-	}
-	printf("Ti e' andata bene\n");
-}
-
 t_moves	*count_moves(int index_a, int index_b, int len_a,  int len_b)
 {
 	t_moves	*curr;
