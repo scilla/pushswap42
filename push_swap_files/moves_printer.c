@@ -48,3 +48,12 @@ void	print_moves(t_moves *to_do)
 	else
 		print_moves2(to_do);
 }
+
+void	loop_print(char *cmd, int nb)
+{
+	while (nb--)
+	{
+		write(1, cmd, ft_strlen(cmd));
+		write(1, "\n", 1);
+	}
+}
