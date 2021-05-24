@@ -15,6 +15,7 @@ CHECKER_SRCS =	main.c				\
 				get_commands.c		\
 				checker.c			\
 				commands.c			\
+				checker_utils.c			
 
 
 CHECKER_DIR = ./checker_files

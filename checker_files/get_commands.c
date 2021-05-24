@@ -5,28 +5,28 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: vbuonvin <vbuonvin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/09 18:58:34 by vbuonvin          #+#    #+#             */
-/*   Updated: 2021/05/23 18:18:06 by vbuonvin         ###   ########.fr       */
+/*   Created: 2021/05/24 13:48:27 by vbuonvin          #+#    #+#             */
+/*   Updated: 2021/05/24 13:53:30 by vbuonvin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../push_swap.h"
 
-void print_stack(t_list *stack_a, t_list *stack_b)
+void	print_stack(t_list *stack_a, t_list *stack_b)
 {
-	if(stack_a)
+	if (stack_a)
 	{
 		printf("STACK A\n");
-		while(stack_a)
+		while (stack_a)
 		{
 			printf("INDEX: %d		NUMBER: %d\n", stack_a->index, stack_a->nb);
 			stack_a = stack_a->next;
 		}
 	}
-	if(stack_b)
+	if (stack_b)
 	{
 		printf("STACK B\n");
-		while(stack_b)
+		while (stack_b)
 		{
 			printf("INDEX: %d		NUMBER: %d\n", stack_b->index, stack_b->nb);
 			stack_b = stack_b->next;
@@ -34,88 +34,87 @@ void print_stack(t_list *stack_a, t_list *stack_b)
 	}
 }
 
-void activate_command_2(char *cmd, t_list **stack_a, t_list **stack_b)
+void	activate_command_2(char *cmd, t_list **stack_a, t_list **stack_b)
 {
-	if(!ft_strcmp(cmd, "ss"))
+	if (!ft_strcmp(cmd, "ss"))
 	{
 		swap_first_two_elements(stack_a);
 		swap_first_two_elements(stack_b);
 	}
-	if(!ft_strcmp(cmd, "pa"))
+	if (!ft_strcmp(cmd, "pa"))
 		push_on_a(stack_a, stack_b);
-	if(!ft_strcmp(cmd, "pb"))
+	if (!ft_strcmp(cmd, "pb"))
 		push_on_b(stack_a, stack_b);
-	if(!ft_strcmp(cmd, "rr"))
+	if (!ft_strcmp(cmd, "rr"))
 	{
 		rotate_stack(stack_a);
 		rotate_stack(stack_b);
 	}
 }
 
-void activate_command_1(char *cmd, t_list **stack_a, t_list **stack_b)
+void	activate_command_1(char *cmd, t_list **stack_a, t_list **stack_b)
 {
-	if(!ft_strcmp(cmd, "sa"))
+	if (!ft_strcmp(cmd, "sa"))
 		swap_first_two_elements(stack_a);
-	if(!ft_strcmp(cmd, "sb"))
+	if (!ft_strcmp(cmd, "sb"))
 		swap_first_two_elements(stack_b);
-	if(!ft_strcmp(cmd, "ra"))
+	if (!ft_strcmp(cmd, "ra"))
 		rotate_stack(stack_a);
-	if(!ft_strcmp(cmd, "rb"))
+	if (!ft_strcmp(cmd, "rb"))
 		rotate_stack(stack_b);
-	if(!ft_strcmp(cmd, "rra"))
+	if (!ft_strcmp(cmd, "rra"))
 		reverse_rotate(stack_a);
-	if(!ft_strcmp(cmd, "rrb"))
+	if (!ft_strcmp(cmd, "rrb"))
 		reverse_rotate(stack_b);
-	if(!ft_strcmp(cmd, "rrr"))
+	if (!ft_strcmp(cmd, "rrr"))
 	{
 		reverse_rotate(stack_a);
 		reverse_rotate(stack_b);
 	}
 }
 
-void give_result(t_list *stack_a, t_list *stack_b)
+void	give_result(t_list *stack_a, t_list *stack_b)
 {
-	t_list *tmp_b;
-	int i;
+	t_list	*tmp_b;
+	int		i;
 
 	i = 1;
 	tmp_b = stack_b;
-	if(stack_a && !tmp_b)
+	if (stack_a && !tmp_b)
 	{
-		while(stack_a->next)
+		while (stack_a->next)
 		{
-			if(stack_a->nb < stack_a->next->nb)
+			if (stack_a->nb < stack_a->next->nb)
 				stack_a = stack_a->next;
 			else
 			{
 				write(1, "KO\n", 3);
-				break;
+				break ;
 			}
 		}
-		if(stack_a->next == NULL)
+		if (stack_a->next == NULL)
 			write(1, "OK\n", 3);
 	}
 	if (tmp_b != NULL)
 		write(1, "KO\n", 3);
 }
 
-void receive_commands(t_list **stack_a,t_list **stack_b)
+void	receive_commands(t_list **stack_a, t_list **stack_b)
 {
 	char	**cmd;
 
-	cmd = malloc(sizeof(char *)); 
-	while(get_next_line(0, cmd) > 0)
+	cmd = malloc(sizeof(char *));
+	while (get_next_line(0, cmd) > 0)
 	{
-		if(!ft_strcmp(*cmd, "ss") || !ft_strcmp(*cmd, "rr") ||
-			!ft_strcmp(*cmd, "pa") || !ft_strcmp(*cmd, "pb") )
+		if (!ft_strcmp(*cmd, "ss") || !ft_strcmp(*cmd, "rr")
+			|| !ft_strcmp(*cmd, "pa") || !ft_strcmp(*cmd, "pb"))
 			activate_command_2(*cmd, stack_a, stack_b);
-		else if(!ft_strcmp(*cmd, "sa") || !ft_strcmp(*cmd, "sb") ||
-			!ft_strcmp(*cmd, "ra") || !ft_strcmp(*cmd, "rb") ||
-			!ft_strcmp(*cmd, "rra") || !ft_strcmp(*cmd, "rrb") ||
-			!ft_strcmp(*cmd, "rrr"))
+		else if (!ft_strcmp(*cmd, "sa") || !ft_strcmp(*cmd, "sb")
+			|| !ft_strcmp(*cmd, "ra") || !ft_strcmp(*cmd, "rb")
+			|| !ft_strcmp(*cmd, "rra") || !ft_strcmp(*cmd, "rrb")
+			|| !ft_strcmp(*cmd, "rrr"))
 			activate_command_1(*cmd, stack_a, stack_b);
 		else
 			write(1, "Command does not exist\n", 23);
-		//print_stack(*stack_a, *stack_b);
 	}
 }
