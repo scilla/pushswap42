@@ -187,7 +187,7 @@ int main(int argc, char **argv)
 		print_moves(&(t_moves){arrA->len - spot, 0, 0, 2});
 		count += arrA->len - spot;
 	}
-	print_stack(arrA);
+	//print_stack(arrA);
 	free(arrB->data);
 	free(arrB);
 	free(dup_lis->data);
