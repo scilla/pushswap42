@@ -2,15 +2,17 @@
 
 void	free_stack(t_list **stack)
 {
-	t_list	*tmp;
+	t_list *curr;
+	t_list *tmp;
 
-	tmp = *stack;
-	while (tmp)
+	curr = *stack;
+	while (curr)
 	{
-		tmp = (*stack)->next;
-		free(*stack);
-		stack = &tmp;
+		tmp = curr->next;
+		free(curr);
+		curr = tmp->next;
 	}
+	
 }
 
 void	adjust_index(t_list **stack)

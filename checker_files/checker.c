@@ -17,7 +17,6 @@ void	start_checker(int *stack_a, int size)
 		i++;
 	}
 	free_stack(&tmp_a);
-	free(tmp_a);
 	receive_commands(&real_a, &real_b);
 	give_result(real_a, real_b);
 	if (real_a)
