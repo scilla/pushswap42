@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_commands.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbuonvin <vbuonvin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: scilla <scilla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/24 13:48:27 by vbuonvin          #+#    #+#             */
-/*   Updated: 2021/05/24 15:25:35 by rboldini         ###   ########.fr       */
+/*   Updated: 2021/05/24 16:23:15 by scilla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,4 +95,5 @@ void	receive_commands(t_list **stack_a, t_list **stack_b)
 		else
 			write(1, "Command does not exist\n", 23);
 	}
+	free_matrix(cmd);
 }

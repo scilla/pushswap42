@@ -174,6 +174,8 @@ t_moves	*predict_moves(t_stack *stk_a, t_stack *stk_b, t_stack *lis)
 			free(best);
 			best = curr;
 		}
+		else
+			free(curr);
 		i++;
 	}
 	return (best);
