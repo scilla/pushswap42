@@ -102,7 +102,7 @@ t_moves	*predict_moves(t_stack *stk_a, t_stack *stk_b, t_stack *lis)
 		curr = count_moves(dio);
 		choose_best(&best, curr);
 		i++;
+		free(dio);
 	}
-	free(dio);
 	return (best);
 }

@@ -95,5 +95,6 @@ int	main(int argc, char **argv)
 	free_t_stack(var->dup_lis);
 	free_t_stack(stack_a);
 	free_t_stack(var->lis);
+	free(var);
 	return (1);
 }
