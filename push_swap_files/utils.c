@@ -7,6 +7,19 @@
 
 void	count_moves2(t_index *dio, t_moves *curr, int k)
 {
+	k = dio->index_b;
+	if (dio->index_a > dio->index_b)
+		k = dio->index_a;
+	if (k < curr->abs_moves)
+	{
+		curr->abs_moves = k;
+		curr->moves_a = dio->index_a;
+		curr->moves_b = dio->index_b;
+		curr->opt_code = 0;
+	}
+	k = dio->len_b - dio->index_b;
+	if (dio->len_a - dio->index_a > dio->len_b - dio->index_b)
+		k = dio->len_a - dio->index_a;
 	if (k < curr->abs_moves)
 	{
 		curr->abs_moves = k;
@@ -14,6 +27,15 @@ void	count_moves2(t_index *dio, t_moves *curr, int k)
 		curr->moves_b = dio->len_b - dio->index_b;
 		curr->opt_code = 3;
 	}
+}
+
+t_moves	*count_moves(t_index *dio)
+{
+	t_moves	*curr;
+	int		k;
+
+	curr = malloc(sizeof(t_moves));
+	curr->abs_moves = 9999;
 	k = dio->index_a + dio->len_b - dio->index_b;
 	if (k < curr->abs_moves)
 	{
@@ -30,28 +52,6 @@ void	count_moves2(t_index *dio, t_moves *curr, int k)
 		curr->moves_b = dio->index_b;
 		curr->opt_code = 2;
 	}
-}
-
-t_moves	*count_moves(t_index *dio)
-{
-	t_moves	*curr;
-	int		k;
-
-	curr = malloc(sizeof(t_moves));
-	curr->abs_moves = 9999;
-	k = dio->index_b;
-	if (dio->index_a > dio->index_b)
-		k = dio->index_a;
-	if (k < curr->abs_moves)
-	{
-		curr->abs_moves = k;
-		curr->moves_a = dio->index_a;
-		curr->moves_b = dio->index_b;
-		curr->opt_code = 0;
-	}
-	k = dio->len_b - dio->index_b;
-	if (dio->len_a - dio->index_a > dio->len_b - dio->index_b)
-		k = dio->len_a - dio->index_a;
 	count_moves2(dio, curr, k);
 	return (curr);
 }
