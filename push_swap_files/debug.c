@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   debug.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: scilla <scilla@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/05/25 15:25:34 by scilla            #+#    #+#             */
+/*   Updated: 2021/05/25 15:25:35 by scilla           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../push_swap.h"
 
 void	print_stack(t_stack *src)
@@ -36,35 +48,6 @@ int	check_lis(t_stack *stk_a, t_stack *stk_b, t_stack *lis)
 	free(tmp);
 	return (0);
 }
-
-/*
-**void	check_stack(t_stack *stack, char *dir)
-**{
-**	if (!ft_strcmp(dir, "cre"))
-**	{
-**		for (int i = 0; i < stack->len - 1; i++)
-**		{
-**			if (stack->data[i] > stack->data[i + 1])
-**			{
-**				printf("Hai cannato scemo\n");
-**				return ;
-**			}
-**		}
-**	}
-**	else if (!ft_strcmp(dir, "dec"))
-**	{
-**		for (int i = 0; i < stack->len - 1; i++)
-**		{
-**			if (stack->data[i] < stack->data[i + 1])
-**			{
-**				printf("Hai cannato scemo\n");
-**				return ;
-**			}
-**		}
-**	}
-**	printf("Ti e' andata bene\n");
-**}
-*/
 
 void	print_arr(t_list *stack_a, t_list *stack_b)
 {
