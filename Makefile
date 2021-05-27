@@ -71,6 +71,4 @@ fclean: clean
 
 re: fclean all
 
-banana: ${CHECKER_DIRSRCS} ${CHECKER_OBJS}
-
 .PHONY: all clean fclean re push_swap checker libft

@@ -6,7 +6,7 @@
 /*   By: scilla <scilla@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/25 15:26:04 by scilla            #+#    #+#             */
-/*   Updated: 2021/05/25 15:26:05 by scilla           ###   ########.fr       */
+/*   Updated: 2021/05/25 17:12:47 by scilla           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ int	max_stack(t_stack **stack, int len)
 
 	res = stack[0]->len;
 	i = 0;
+	max_ind = 0;
 	while (i < len)
 	{
 		if (stack[i]->len > res)
